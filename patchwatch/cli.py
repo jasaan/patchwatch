@@ -1,0 +1,198 @@
+"""patchwatch command line.
+
+patchwatch run        build the catalog, match it against the feeds, report and notify
+patchwatch ack        mark a vulnerability as not affecting a product, with a reason
+patchwatch suggest    propose NVD product names for Intune apps that have no mapping
+"""
+
+from __future__ import annotations
+
+import argparse
+import getpass
+import json
+import os
+import sys
+from datetime import date
+from pathlib import Path
+
+import yaml
+
+from . import inventory, notify
+from .feeds import Feeds
+from .match import add_epss, match_software
+from .report import group, markdown
+from .state import State
+from .triage import triage
+
+
+def load_config(path: str) -> tuple[dict, Path]:
+    p = Path(path)
+    return yaml.safe_load(p.read_text(encoding="utf-8")) or {}, p.parent
+
+
+def cmd_run(args) -> int:
+    config, base = load_config(args.config)
+    feeds_dir = Path(args.record) if args.record else base / config.get("feeds_dir", "feeds")
+    today = date.fromisoformat(args.today) if args.today else None
+    feeds = Feeds("live" if args.live else "replay", feeds_dir if (args.record or not args.live) else None, today)
+
+    catalog = inventory.build(config, base, live_intune=args.live_intune, live_cluster=args.live_cluster)
+    lookback = int(config.get("nvd_lookback_days", 120))
+    results = {}
+    for sw in catalog.software:
+        results[sw.key] = match_software(sw, feeds, lookback)
+    add_epss(results, feeds)
+    findings = []
+    for sw in catalog.software:
+        findings += triage(sw, results[sw.key], feeds, feeds.today, config.get("triage"))
+    feeds.finish()
+    if feeds.missing:
+        print(
+            f"warning: {len(feeds.missing)} feed responses missing from the snapshot (first: {feeds.missing[0]})",
+            file=sys.stderr,
+        )
+
+    state = State(args.state)
+    state.record(findings)
+    acked = [f for f in findings if state.acked(f)]
+    open_findings = [f for f in findings if f not in acked]
+
+    report = markdown(open_findings, catalog.gaps, feeds.today.isoformat(), len(catalog.software), len(acked))
+    if args.report:
+        Path(args.report).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.report).write_text(report, encoding="utf-8")
+    else:
+        print(report)
+    if args.json:
+        Path(args.json).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.json).write_text(json.dumps(to_json(open_findings), indent=2) + "\n", encoding="utf-8")
+
+    if args.notify:
+        tiers = set(args.tiers.split(","))
+        new = state.to_notify(open_findings, tiers)
+        alerts = [a for a in group(new) if a.tier in tiers]
+        if alerts:
+            ncfg = config.get("notify", {})
+            targets = {
+                "slack": (os.environ.get(ncfg.get("slack_webhook_env", "SLACK_WEBHOOK_URL"), ""), notify.slack_payload),
+                "teams": (os.environ.get(ncfg.get("teams_webhook_env", "TEAMS_WEBHOOK_URL"), ""), notify.teams_payload),
+            }
+            sent = False
+            for name, (url, build) in targets.items():
+                payload = build(alerts)
+                if args.dry_run or not url:
+                    out = Path(args.payload_dir or "out")
+                    out.mkdir(parents=True, exist_ok=True)
+                    (out / f"{name}.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+                    print(
+                        f"{name}: {len(alerts)} alerts written to {out / (name + '.json')} (not sent)", file=sys.stderr
+                    )
+                else:
+                    notify.send(url, payload)
+                    sent = True
+                    print(f"{name}: sent {len(alerts)} alerts", file=sys.stderr)
+            if sent:
+                state.mark_notified(new)
+        else:
+            print("Nothing new to notify.", file=sys.stderr)
+    state.close()
+    return 1 if args.fail_on_urgent and any(f.tier == "urgent" for f in open_findings) else 0
+
+
+def to_json(findings) -> list[dict]:
+    out = []
+    for f in findings:
+        v = f.vuln
+        out.append(
+            {
+                "product": f.software.name,
+                "version": f.software.version,
+                "key": f.software.key,
+                "tier": f.tier,
+                "reasons": f.reasons,
+                "kind": f.kind,
+                "vuln": None
+                if not v
+                else {
+                    "id": v.id,
+                    "aliases": sorted(v.aliases),
+                    "cvss": v.score,
+                    "vector": v.vector,
+                    "cwes": sorted(v.cwes),
+                    "epss": v.epss,
+                    "kev_date_added": v.kev["dateAdded"] if v.kev else None,
+                    "fixed": sorted(v.fixed),
+                    "summary": v.summary,
+                    "sources": sorted(v.sources),
+                },
+                "assets": f.software.asset_counts(),
+                "internet_facing": [f"{a.name} ({a.exposure})" for a in f.software.assets if a.exposed],
+            }
+        )
+    return out
+
+
+def cmd_ack(args) -> int:
+    state = State(args.state)
+    state.ack(args.vuln, args.product, args.reason, args.by or getpass.getuser())
+    state.close()
+    print(f"Acknowledged {args.vuln} for {args.product}: {args.reason}")
+    return 0
+
+
+def cmd_suggest(args) -> int:
+    config, base = load_config(args.config)
+    rules = inventory.load_rules(base / config.get("mappings", "mappings.yaml"))
+    apps = (
+        inventory.intune_apps_live()
+        if args.live_intune
+        else json.loads((base / config["inventory"]["intune"]["file"]).read_text())["value"]
+    )
+    feeds = Feeds("live" if args.live else "replay", None if args.live else base / config.get("feeds_dir", "feeds"))
+    for app in apps:
+        if inventory.find_rule(rules, app["displayName"]):
+            continue
+        words = " ".join(app["displayName"].replace("(", " ").replace(")", " ").split()[:3])
+        options = feeds.cpe_suggestions(words)
+        shown = ", ".join(f"{c} ({n})" for c, n in options) or "no NVD products found; add `ignore: true`?"
+        print(f"{app['displayName']}: {shown}")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> None:
+    ap = argparse.ArgumentParser(prog="patchwatch", description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    sub = ap.add_subparsers(dest="command", required=True)
+
+    run = sub.add_parser("run", help="match the catalog against the feeds")
+    run.add_argument("--config", default="demo/config.yaml")
+    run.add_argument("--live", action="store_true", help="fetch feeds from the internet (default: replay snapshot)")
+    run.add_argument("--record", metavar="DIR", help="with --live, save every feed response to DIR")
+    run.add_argument("--live-intune", action="store_true", help="read detectedApps from Microsoft Graph")
+    run.add_argument("--live-cluster", action="store_true", help="read the cluster through kubectl")
+    run.add_argument("--today", help="override today's date (YYYY-MM-DD)")
+    run.add_argument("--state", default="state.db")
+    run.add_argument("--report", help="write the Markdown report here instead of printing it")
+    run.add_argument("--json", help="also write findings as JSON")
+    run.add_argument("--notify", action="store_true", help="send new findings to Slack and Teams")
+    run.add_argument("--tiers", default="urgent,digest", help="tiers to notify (default: urgent,digest)")
+    run.add_argument("--dry-run", action="store_true", help="write the Slack/Teams payloads to files, don't send")
+    run.add_argument("--payload-dir", help="where --dry-run writes payloads (default: out/)")
+    run.add_argument("--fail-on-urgent", action="store_true", help="exit 1 when anything is urgent")
+    run.set_defaults(func=cmd_run)
+
+    ack = sub.add_parser("ack", help="acknowledge a vulnerability for a product")
+    ack.add_argument("vuln")
+    ack.add_argument("--product", required=True, help="product key from the JSON output, or its name")
+    ack.add_argument("--reason", required=True)
+    ack.add_argument("--by")
+    ack.add_argument("--state", default="state.db")
+    ack.set_defaults(func=cmd_ack)
+
+    sug = sub.add_parser("suggest", help="suggest mappings for unmapped Intune apps")
+    sug.add_argument("--config", default="demo/config.yaml")
+    sug.add_argument("--live", action="store_true")
+    sug.add_argument("--live-intune", action="store_true")
+    sug.set_defaults(func=cmd_suggest)
+
+    args = ap.parse_args(argv)
+    sys.exit(args.func(args))

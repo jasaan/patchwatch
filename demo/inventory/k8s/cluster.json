@@ -1,0 +1,369 @@
+{
+  "name": "prod-aks",
+  "serverVersion": {
+    "major": "1",
+    "minor": "34",
+    "gitVersion": "v1.34.5",
+    "platform": "linux/amd64"
+  },
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "ingress-nginx-controller-7d7386e45-d93f9",
+        "namespace": "ingress-nginx",
+        "labels": {
+          "app.kubernetes.io/name": "ingress-nginx"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "ingress-nginx-controller-7d7386e45"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "ingress-nginx-controller",
+            "image": "registry.k8s.io/ingress-nginx/controller:v1.11.3"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "ingress-nginx-controller-7d7386e45-4f46a",
+        "namespace": "ingress-nginx",
+        "labels": {
+          "app.kubernetes.io/name": "ingress-nginx"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "ingress-nginx-controller-7d7386e45"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "ingress-nginx-controller",
+            "image": "registry.k8s.io/ingress-nginx/controller:v1.11.3"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "ingress-nginx-controller",
+        "namespace": "ingress-nginx"
+      },
+      "spec": {
+        "type": "LoadBalancer",
+        "selector": {
+          "app.kubernetes.io/name": "ingress-nginx"
+        },
+        "ports": [
+          {
+            "port": 443
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "storefront-10c616947-e7149",
+        "namespace": "shop",
+        "labels": {
+          "app": "storefront"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "storefront-10c616947"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "storefront",
+            "image": "ghcr.io/contoso/storefront:2.4.0"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "storefront-10c616947-87e9e",
+        "namespace": "shop",
+        "labels": {
+          "app": "storefront"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "storefront-10c616947"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "storefront",
+            "image": "ghcr.io/contoso/storefront:2.4.0"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "storefront-10c616947-49808",
+        "namespace": "shop",
+        "labels": {
+          "app": "storefront"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "storefront-10c616947"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "storefront",
+            "image": "ghcr.io/contoso/storefront:2.4.0"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "storefront",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "selector": {
+          "app": "storefront"
+        },
+        "ports": [
+          {
+            "port": 80
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "Ingress",
+      "metadata": {
+        "name": "storefront",
+        "namespace": "shop"
+      },
+      "spec": {
+        "ingressClassName": "nginx",
+        "rules": [
+          {
+            "host": "shop.contoso.com",
+            "http": {
+              "paths": [
+                {
+                  "path": "/",
+                  "pathType": "Prefix",
+                  "backend": {
+                    "service": {
+                      "name": "storefront",
+                      "port": {
+                        "number": 80
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "orders-api-541fc8bb7-809d3",
+        "namespace": "orders",
+        "labels": {
+          "app": "orders-api"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "orders-api-541fc8bb7"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "orders-api",
+            "image": "ghcr.io/contoso/orders-api:1.9.2"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "orders-api-541fc8bb7-f0432",
+        "namespace": "orders",
+        "labels": {
+          "app": "orders-api"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "orders-api-541fc8bb7"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "orders-api",
+            "image": "ghcr.io/contoso/orders-api:1.9.2"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "orders-api",
+        "namespace": "orders"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "selector": {
+          "app": "orders-api"
+        },
+        "ports": [
+          {
+            "port": 80
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "ssh-bastion-f4004ce70-b6430",
+        "namespace": "ops",
+        "labels": {
+          "app": "ssh-bastion"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "ssh-bastion-f4004ce70"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "ssh-bastion",
+            "image": "ghcr.io/contoso/ssh-bastion:3.1"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "ssh-bastion",
+        "namespace": "ops"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "selector": {
+          "app": "ssh-bastion"
+        },
+        "ports": [
+          {
+            "port": 80
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "coredns-3155c00f8-29750",
+        "namespace": "kube-system",
+        "labels": {
+          "k8s-app": "kube-dns"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "coredns-3155c00f8"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "coredns",
+            "image": "registry.k8s.io/coredns/coredns:v1.12.1"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "coredns-3155c00f8-e0ee6",
+        "namespace": "kube-system",
+        "labels": {
+          "k8s-app": "kube-dns"
+        },
+        "ownerReferences": [
+          {
+            "kind": "ReplicaSet",
+            "name": "coredns-3155c00f8"
+          }
+        ]
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "coredns",
+            "image": "registry.k8s.io/coredns/coredns:v1.12.1"
+          }
+        ]
+      }
+    }
+  ]
+}

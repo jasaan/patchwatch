@@ -1,0 +1,46 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "syft",
+          "version": "1.33.0"
+        }
+      ]
+    },
+    "component": {
+      "type": "operating-system",
+      "name": "web-01"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "openssh-server",
+      "version": "1:9.6p1-3ubuntu13.5",
+      "purl": "pkg:deb/ubuntu/openssh-server@1:9.6p1-3ubuntu13.5?arch=amd64&distro=ubuntu-24.04&upstream=openssh"
+    },
+    {
+      "type": "library",
+      "name": "sudo",
+      "version": "1.9.15p5-3ubuntu5",
+      "purl": "pkg:deb/ubuntu/sudo@1.9.15p5-3ubuntu5?arch=amd64&distro=ubuntu-24.04"
+    },
+    {
+      "type": "library",
+      "name": "nginx",
+      "version": "1.24.0-2ubuntu7.1",
+      "purl": "pkg:deb/ubuntu/nginx@1.24.0-2ubuntu7.1?arch=amd64&distro=ubuntu-24.04"
+    },
+    {
+      "type": "library",
+      "name": "libssl3t64",
+      "version": "3.0.13-0ubuntu3.5",
+      "purl": "pkg:deb/ubuntu/libssl3t64@3.0.13-0ubuntu3.5?arch=amd64&distro=ubuntu-24.04&upstream=openssl"
+    }
+  ]
+}

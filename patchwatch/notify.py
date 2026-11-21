@@ -1,0 +1,88 @@
+"""Slack and Microsoft Teams messages.
+
+Slack: an incoming webhook with Block Kit sections.
+Teams: a Workflows webhook ("Send webhook alerts to a channel" template) with an Adaptive
+Card. The older Office 365 connector webhooks are retired, so they aren't supported.
+"""
+
+from __future__ import annotations
+
+import requests
+
+from .report import TIER_ICON, TIER_TITLE, Alert
+
+MAX_ALERTS = 20  # Slack allows 50 blocks per message; keep messages readable
+
+
+def _heading(alerts: list[Alert], title: str) -> str:
+    urgent = sum(1 for a in alerts if a.tier == "urgent")
+    return f"{title}: {urgent} urgent, {len(alerts) - urgent} other" if urgent else f"{title}: {len(alerts)} items"
+
+
+def slack_payload(alerts: list[Alert], title: str = "patchwatch") -> dict:
+    blocks: list[dict] = [{"type": "header", "text": {"type": "plain_text", "text": _heading(alerts, title)[:150]}}]
+    for a in alerts[:MAX_ALERTS]:
+        lines = [f"{TIER_ICON[a.tier]} *{a.title}*  ·  {a.where}"]
+        lines += [f"• {r}" for r in a.reason_lines(3)[:4]]
+        if s := a.summary_line():
+            lines.append(f"`{s}`")
+        blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": "\n".join(lines)[:3000]}})
+    if len(alerts) > MAX_ALERTS:
+        blocks.append(
+            {
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": f"…and {len(alerts) - MAX_ALERTS} more in the full report"}],
+            }
+        )
+    blocks.append(
+        {
+            "type": "context",
+            "elements": [
+                {"type": "mrkdwn", "text": 'Not affected? `patchwatch ack <CVE> --product <name> --reason "…"`'}
+            ],
+        }
+    )
+    return {"text": _heading(alerts, title), "blocks": blocks}
+
+
+def teams_payload(alerts: list[Alert], title: str = "patchwatch") -> dict:
+    body: list[dict] = [
+        {"type": "TextBlock", "size": "Large", "weight": "Bolder", "wrap": True, "text": _heading(alerts, title)}
+    ]
+    for a in alerts[:MAX_ALERTS]:
+        color = {"urgent": "Attention", "digest": "Warning"}.get(a.tier, "Default")
+        body.append(
+            {
+                "type": "TextBlock",
+                "weight": "Bolder",
+                "color": color,
+                "wrap": True,
+                "separator": True,
+                "text": f"{TIER_TITLE[a.tier]}: {a.title}",
+            }
+        )
+        body.append({"type": "TextBlock", "isSubtle": True, "wrap": True, "spacing": "None", "text": a.where})
+        body.append({"type": "TextBlock", "wrap": True, "text": "\n".join(f"- {r}" for r in a.reason_lines(3)[:4])})
+        if s := a.summary_line():
+            body.append({"type": "TextBlock", "wrap": True, "fontType": "Monospace", "text": s})
+    if len(alerts) > MAX_ALERTS:
+        body.append({"type": "TextBlock", "isSubtle": True, "text": f"…and {len(alerts) - MAX_ALERTS} more"})
+    card = {
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "type": "AdaptiveCard",
+        "version": "1.4",
+        "msteams": {"width": "Full"},
+        "body": body,
+    }
+    return {
+        "type": "message",
+        "attachments": [
+            {"contentType": "application/vnd.microsoft.card.adaptive", "contentUrl": None, "content": card}
+        ],
+    }
+
+
+def send(url: str, payload: dict) -> None:
+    r = requests.post(url, json=payload, timeout=30)
+    if r.status_code >= 300:
+        raise RuntimeError(f"Webhook returned {r.status_code}: {r.text[:200]}")

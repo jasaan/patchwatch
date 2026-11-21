@@ -1,0 +1,210 @@
+"""Decide which findings are worth someone's attention, and how soon.
+
+  urgent   alert right away
+           - on CISA KEV (a "zero-day" when added in the last `zero_day_days`)
+           - the description says it's exploited in the wild
+           - unauthenticated network RCE or authentication bypass on a server, container or
+             cluster that is critical, or high (>= exposed_min_score) on an internet-facing asset.
+             In a desktop-only app the same bug goes to the digest: it's reached by opening a
+             page or file, not by connecting to the machine.
+  digest   daily summary
+           - critical (CVSS >= critical_score) and EPSS >= epss_threshold or internet-facing
+           - EPSS >= epss_threshold (likely to be exploited soon)
+  weekly   planning
+           - end of support passed or within `eol_warning_days`
+           - a new release of a product you opted in to (watch_releases)
+  log      everything else: recorded and in the full report, but nobody is notified
+
+Every finding carries the reasons it got its tier, and those reasons are shown in alerts.
+"""
+
+from __future__ import annotations
+
+import re
+from datetime import date
+
+from .feeds import Feeds
+from .models import Finding, Software, Vuln
+from .versions import compare
+
+DEFAULTS = {
+    "zero_day_days": 14,
+    "epss_threshold": 0.10,
+    "critical_score": 9.0,
+    "exposed_min_score": 8.0,
+    "eol_warning_days": 90,
+}
+
+# Weakness types that mean code execution: injection, deserialisation, unsafe reflection and
+# file upload. Memory-corruption types (CWE-787, CWE-416, …) only count when the advisory
+# itself says code execution; on their own they flag hundreds of crash-only bugs.
+RCE_CWES = {
+    "CWE-77",
+    "CWE-78",
+    "CWE-94",
+    "CWE-95",
+    "CWE-96",
+    "CWE-98",
+    "CWE-434",
+    "CWE-470",
+    "CWE-502",
+    "CWE-917",
+    "CWE-1336",
+}
+# Weakness types that mean getting in without valid credentials.
+BYPASS_CWES = {
+    "CWE-287",
+    "CWE-288",
+    "CWE-290",
+    "CWE-294",
+    "CWE-302",
+    "CWE-305",
+    "CWE-306",
+    "CWE-345",
+    "CWE-347",
+    "CWE-639",
+    "CWE-798",
+    "CWE-862",
+    "CWE-863",
+    "CWE-1390",
+}
+RCE_TEXT = re.compile(
+    r"remote code execution|arbitrary code|code execution|command injection|execute arbitrary"
+    r"|\bRCE\b",
+    re.I,
+)
+BYPASS_TEXT = re.compile(r"authenticat\w* bypass|bypass\w* (?:the )?authenticat|password authentication bypass", re.I)
+EXPLOITED_TEXT = re.compile(r"exploited in the wild|exploit for \S+ exists in the wild|actively exploited", re.I)
+_LABEL_SCORE = {"CRITICAL": 9.0, "HIGH": 7.0, "MODERATE": 5.0, "MEDIUM": 5.0, "LOW": 2.0}
+
+
+def effective_score(v: Vuln) -> float | None:
+    return v.score if v.score is not None else _LABEL_SCORE.get(v.severity)
+
+
+def _says(pattern: re.Pattern, text: str) -> bool:
+    """The description claims it, without hedging ("may lead to a crash or possibly code execution")."""
+    for m in pattern.finditer(text):
+        sentence = text[text.rfind(". ", 0, m.start()) + 1 : m.start()]
+        if not re.search(r"possibl|\bmay\b|might|potential|theoretical|\bcould\b", sentence, re.I):
+            return True
+    return False
+
+
+def attack_class(v: Vuln) -> str:
+    """'RCE', 'auth bypass' or '' from the CWE ids, falling back to the description."""
+    if v.cwes & RCE_CWES or _says(RCE_TEXT, v.summary):
+        return "RCE"
+    if v.cwes & BYPASS_CWES or _says(BYPASS_TEXT, v.summary):
+        return "auth bypass"
+    return ""
+
+
+def classify(sw: Software, v: Vuln, today: date, cfg: dict) -> tuple[str, list[str], dict[str, str]]:
+    """Tier for one vulnerability, the reasons, and a short note per reason (shown next to the CVE)."""
+    urgent: dict[str, str] = {}
+    digest: dict[str, str] = {}
+    score = effective_score(v)
+    critical = score is not None and score >= cfg["critical_score"]
+    likely = v.epss is not None and v.epss >= cfg["epss_threshold"]
+    epss = f"EPSS {v.epss:.0%}" if v.epss is not None else ""
+
+    if v.kev:
+        added = date.fromisoformat(v.kev["dateAdded"])
+        age = (today - added).days
+        if 0 <= age <= cfg["zero_day_days"]:
+            urgent[f"Zero-day (added to CISA KEV in the last {cfg['zero_day_days']} days)"] = f"added {age}d ago"
+        else:
+            urgent["On CISA KEV"] = f"added {added.isoformat()}"
+        if v.kev.get("knownRansomwareCampaignUse") == "Known":
+            urgent["Used in ransomware campaigns"] = ""
+    if EXPLOITED_TEXT.search(v.summary):
+        urgent["Advisory says it is exploited in the wild"] = ""
+
+    cls = attack_class(v)
+    unauth_network = v.metric("AV") == "N" and v.metric("PR") == "N" and v.metric("UI") in ("N", "")
+    client_only = bool(sw.assets) and all(a.type == "endpoint" for a in sw.assets)
+    if cls and unauth_network:
+        if client_only:  # a laptop app is reached by opening a page or file, not by connecting to it
+            if critical:
+                digest[f"Critical {cls} in a desktop app"] = f"CVSS {score}"
+        elif sw.exposed and score is not None and score >= cfg["exposed_min_score"]:
+            urgent[f"Unauthenticated network {cls} on an internet-facing asset"] = f"CVSS {score}"
+        elif critical:
+            urgent[f"Unauthenticated network {cls}"] = f"CVSS {score}"
+
+    if urgent:
+        return "urgent", list(urgent), urgent
+    if critical and (likely or sw.exposed):
+        digest["Critical and likely to be exploited" if likely else "Critical and internet-facing"] = (
+            f"CVSS {score}" + (f", {epss}" if likely else "")
+        )
+    elif likely:
+        digest[f"Likely to be exploited soon (EPSS >= {cfg['epss_threshold']:.0%})"] = epss
+    if digest:
+        return "digest", list(digest), digest
+    return "log", [], {}
+
+
+def _cycle(cycles: list[dict], version: str) -> dict | None:
+    best = None
+    for c in cycles:
+        name = str(c.get("cycle", ""))
+        if (version == name or version.startswith(name + ".")) and (best is None or len(name) > len(best["cycle"])):
+            best = {**c, "cycle": name}
+    return best
+
+
+def lifecycle(sw: Software, feeds: Feeds, today: date, cfg: dict) -> list[Finding]:
+    if not sw.eol:
+        return []
+    cycles = feeds.eol(sw.eol)
+    c = _cycle(cycles, sw.version)
+    if not c:
+        return []
+    out = []
+    eol = c.get("eol")
+    if eol is True:
+        out.append(Finding(sw, "weekly", [f"{sw.name} {c['cycle']} is no longer supported"], kind="eol"))
+    elif isinstance(eol, str):
+        days = (date.fromisoformat(eol) - today).days
+        if days < 0:
+            out.append(
+                Finding(
+                    sw,
+                    "weekly",
+                    [f"End of support was {eol} ({-days} days ago)"],
+                    kind="eol",
+                    detail=f"cycle {c['cycle']}",
+                )
+            )
+        elif days <= cfg["eol_warning_days"]:
+            out.append(
+                Finding(
+                    sw,
+                    "weekly",
+                    [f"End of support on {eol} (in {days} days)"],
+                    kind="eol",
+                    detail=f"cycle {c['cycle']}",
+                )
+            )
+    if sw.watch_releases and c.get("latest") and compare(sw.version, str(c["latest"])) < 0:
+        out.append(
+            Finding(
+                sw,
+                "weekly",
+                [f"New release {c['latest']} available (installed {sw.version})"],
+                kind="release",
+                detail=str(c["latest"]),
+            )
+        )
+    return out
+
+
+def triage(sw: Software, vulns: list[Vuln], feeds: Feeds, today: date, cfg: dict | None = None) -> list[Finding]:
+    cfg = {**DEFAULTS, **(cfg or {})}
+    findings = []
+    for v in vulns:
+        tier, reasons, notes = classify(sw, v, today, cfg)
+        findings.append(Finding(sw, tier, reasons, vuln=v, notes=notes))
+    return findings + lifecycle(sw, feeds, today, cfg)

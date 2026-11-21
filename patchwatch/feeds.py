@@ -1,0 +1,259 @@
+"""Free vulnerability feeds: CISA KEV, NVD, OSV, EPSS and endoflife.date.
+
+`Feeds` runs in one of two modes:
+  live    fetch from the public APIs; with `record_dir` set, also save every response there
+  replay  read the responses saved earlier, so runs and tests need no network
+
+Saved NVD records are trimmed to the fields patchwatch reads.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import time
+from datetime import date, timedelta
+from pathlib import Path
+from urllib.parse import quote
+
+import requests
+
+KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+NVD_CVES = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+NVD_CPES = "https://services.nvd.nist.gov/rest/json/cpes/2.0"
+OSV = "https://api.osv.dev/v1"
+EPSS = "https://api.first.org/data/v1/epss"
+EOL = "https://endoflife.date/api"
+NVD_MAX_WINDOW = 120  # days; the NVD API refuses longer publication-date ranges
+
+
+def _safe(name: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", name).strip("_")[:150]
+
+
+def trim_nvd(cve: dict) -> dict:
+    """Keep only what matching and triage use from an NVD CVE record."""
+    metrics = cve.get("metrics", {})
+    v3 = (metrics.get("cvssMetricV31") or metrics.get("cvssMetricV30") or [None])[0]
+    v4 = (metrics.get("cvssMetricV40") or [None])[0]
+    desc = next((d["value"] for d in cve.get("descriptions", []) if d.get("lang") == "en"), "")
+    keep = (
+        "criteria",
+        "vulnerable",
+        "versionStartIncluding",
+        "versionStartExcluding",
+        "versionEndIncluding",
+        "versionEndExcluding",
+    )
+    return {
+        "id": cve["id"],
+        "published": cve.get("published", ""),
+        "description": desc,
+        "cvss3": {"vector": v3["cvssData"]["vectorString"], "score": v3["cvssData"]["baseScore"]} if v3 else None,
+        "cvss4": {"vector": v4["cvssData"]["vectorString"], "score": v4["cvssData"]["baseScore"]} if v4 else None,
+        "cwes": sorted(
+            {
+                d["value"]
+                for w in cve.get("weaknesses", [])
+                for d in w.get("description", [])
+                if d["value"].startswith("CWE-")
+            }
+        ),
+        "configurations": [
+            {
+                "nodes": [
+                    {
+                        "operator": n.get("operator", "OR"),
+                        "cpeMatch": [{k: m[k] for k in keep if k in m} for m in n.get("cpeMatch", [])],
+                    }
+                    for n in c.get("nodes", [])
+                ]
+            }
+            for c in cve.get("configurations", [])
+        ],
+    }
+
+
+class Feeds:
+    def __init__(self, mode: str = "replay", directory: str | Path | None = None, today: date | None = None):
+        if mode not in ("live", "replay"):
+            raise ValueError("mode must be live or replay")
+        self.mode = mode
+        self.dir = Path(directory) if directory else None
+        if mode == "replay" and not self.dir:
+            raise ValueError("replay mode needs a snapshot directory")
+        self.today = today or self._recorded_date() or date.today()
+        self.missing: list[str] = []
+        self._http = requests.Session()
+        self._http.headers["User-Agent"] = "patchwatch/0.1 (+https://github.com/jasaan/patchwatch)"
+        self._nvd_key = os.environ.get("NVD_API_KEY", "")
+        self._last_nvd = 0.0
+        self._kev: dict[str, dict] | None = None
+        self._epss: dict[str, float] = {}
+        self._osv: dict[str, dict] = {}
+
+    # ---- storage ----
+    def _recorded_date(self) -> date | None:
+        if self.mode == "replay" and self.dir and (self.dir / "manifest.json").exists():
+            return date.fromisoformat(json.loads((self.dir / "manifest.json").read_text())["recorded_on"])
+        return None
+
+    def _load(self, name: str):
+        path = self.dir / name
+        if not path.exists():
+            self.missing.append(name)
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    def _cached(self, name: str) -> bool:
+        """Replay, or a recording that already saved this response (so re-runs resume)."""
+        return self.mode == "replay" or bool(self.dir and (self.dir / name).exists())
+
+    def _save(self, name: str, data) -> None:
+        if self.mode == "live" and self.dir:
+            path = self.dir / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(data, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+
+    def finish(self) -> None:
+        """In record mode, note the date so replays use the same 'today'."""
+        if self.mode == "live" and self.dir:
+            existing = {}
+            if (self.dir / "epss.json").exists():
+                existing = json.loads((self.dir / "epss.json").read_text())
+            self._save("epss.json", {**existing, **self._epss})
+            self._save("manifest.json", {"recorded_on": self.today.isoformat()})
+
+    # ---- HTTP ----
+    def _get(self, url: str, params: dict | None = None, nvd: bool = False):
+        for attempt in range(5):
+            if nvd:  # NVD allows 5 requests per 30 s without a key, 50 with one
+                gap = 0.7 if self._nvd_key else 6.5
+                time.sleep(max(0.0, self._last_nvd + gap - time.time()))
+                self._last_nvd = time.time()
+            headers = {"apiKey": self._nvd_key} if nvd and self._nvd_key else {}
+            try:
+                r = self._http.get(url, params=params, headers=headers, timeout=60)
+            except (requests.Timeout, requests.ConnectionError):
+                time.sleep(2**attempt * 3)
+                continue
+            if r.status_code in (403, 429, 500, 502, 503, 504):
+                time.sleep(2**attempt * 3)
+                continue
+            r.raise_for_status()
+            return r.json()
+        raise RuntimeError(f"Giving up on {url} after 5 attempts")
+
+    # ---- CISA KEV ----
+    def kev(self) -> dict[str, dict]:
+        if self._kev is None:
+            data = self._load("kev.json") if self.mode == "replay" else self._get(KEV_URL)
+            if self.mode == "live":
+                self._save("kev.json", data)
+            self._kev = {v["cveID"]: v for v in (data or {}).get("vulnerabilities", [])}
+        return self._kev
+
+    # ---- NVD ----
+    def nvd_cve(self, cve_id: str) -> dict | None:
+        name = f"nvd/cve/{_safe(cve_id)}.json"
+        if self._cached(name):
+            return self._load(name)
+        data = self._get(NVD_CVES, {"cveId": cve_id}, nvd=True)
+        rec = trim_nvd(data["vulnerabilities"][0]["cve"]) if data.get("vulnerabilities") else None
+        self._save(name, rec)
+        return rec
+
+    def nvd_product(self, cpe: str, lookback_days: int) -> list[dict]:
+        """CVEs published in the last `lookback_days` that list this vendor:product."""
+        name = f"nvd/product/{_safe(cpe)}.json"
+        if self._cached(name):
+            return self._load(name) or []
+        days = min(lookback_days, NVD_MAX_WINDOW)
+        start, end = self.today - timedelta(days=days - 1), self.today  # inclusive window
+        params = {
+            "virtualMatchString": f"cpe:2.3:a:{cpe}",
+            "pubStartDate": f"{start.isoformat()}T00:00:00.000",
+            "pubEndDate": f"{end.isoformat()}T23:59:59.999",
+            "resultsPerPage": 2000,
+            "startIndex": 0,
+        }
+        out: list[dict] = []
+        while True:
+            data = self._get(NVD_CVES, params, nvd=True)
+            out += [trim_nvd(v["cve"]) for v in data.get("vulnerabilities", [])]
+            params["startIndex"] += data.get("resultsPerPage", 0) or 2000
+            if params["startIndex"] >= data.get("totalResults", 0):
+                break
+        self._save(name, out)
+        return out
+
+    def cpe_suggestions(self, keyword: str) -> list[tuple[str, int]]:
+        """vendor:product names from the NVD CPE dictionary for a keyword, most common first."""
+        name = f"nvd/cpes/{_safe(keyword.lower())}.json"
+        if self.mode == "replay":
+            return [tuple(x) for x in (self._load(name) or [])]
+        data = self._get(NVD_CPES, {"keywordSearch": keyword, "resultsPerPage": 500}, nvd=True)
+        counts: dict[str, int] = {}
+        for p in data.get("products", []):
+            parts = p["cpe"]["cpeName"].split(":")
+            if parts[2] == "a":
+                counts[f"{parts[3]}:{parts[4]}"] = counts.get(f"{parts[3]}:{parts[4]}", 0) + 1
+        out = sorted(counts.items(), key=lambda x: -x[1])[:5]
+        self._save(name, out)
+        return out
+
+    # ---- OSV ----
+    def osv_query(self, query: dict) -> list[str]:
+        """OSV ids affecting one package version. `query` is an OSV /v1/query body."""
+        pkg = query["package"]
+        label = pkg.get("purl") or f"{pkg['ecosystem']}/{pkg['name']}@{query.get('version', '')}"
+        name = f"osv/query/{_safe(label)}.json"
+        if self._cached(name):
+            return self._load(name) or []
+        ids, body = [], dict(query)
+        while True:
+            r = self._http.post(f"{OSV}/query", json=body, timeout=60)
+            r.raise_for_status()
+            data = r.json()
+            for v in data.get("vulns", []):  # /v1/query returns full records; keep them
+                ids.append(v["id"])
+                self._osv[v["id"]] = v
+                self._save(f"osv/vuln/{_safe(v['id'])}.json", v)
+            if not data.get("next_page_token"):
+                break
+            body["page_token"] = data["next_page_token"]
+        self._save(name, sorted(ids))
+        return sorted(ids)
+
+    def osv_vuln(self, osv_id: str) -> dict | None:
+        name = f"osv/vuln/{_safe(osv_id)}.json"
+        if osv_id in self._osv:
+            return self._osv[osv_id]
+        if self._cached(name):
+            return self._load(name)
+        data = self._get(f"{OSV}/vulns/{quote(osv_id)}")
+        self._save(name, data)
+        return data
+
+    # ---- EPSS ----
+    def epss(self, cves: list[str]) -> dict[str, float]:
+        """Probability of exploitation in the next 30 days, per CVE."""
+        if self.mode == "replay":
+            saved = self._load("epss.json") or {}
+            return {c: saved[c] for c in cves if c in saved}
+        todo = [c for c in sorted(set(cves)) if c not in self._epss]
+        for i in range(0, len(todo), 100):
+            data = self._get(EPSS, {"cve": ",".join(todo[i : i + 100]), "limit": 100})
+            for row in data.get("data", []):
+                self._epss[row["cve"]] = float(row["epss"])
+        return {c: self._epss[c] for c in cves if c in self._epss}
+
+    # ---- endoflife.date ----
+    def eol(self, slug: str) -> list[dict]:
+        name = f"eol/{_safe(slug)}.json"
+        if self._cached(name):
+            return self._load(name) or []
+        data = self._get(f"{EOL}/{quote(slug)}.json")
+        self._save(name, data)
+        return data

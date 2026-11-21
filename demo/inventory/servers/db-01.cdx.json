@@ -1,0 +1,40 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "syft",
+          "version": "1.33.0"
+        }
+      ]
+    },
+    "component": {
+      "type": "operating-system",
+      "name": "db-01"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "openssh-server",
+      "version": "1:8.9p1-3ubuntu0.13",
+      "purl": "pkg:deb/ubuntu/openssh-server@1:8.9p1-3ubuntu0.13?arch=amd64&distro=ubuntu-22.04&upstream=openssh"
+    },
+    {
+      "type": "library",
+      "name": "sudo",
+      "version": "1.9.9-1ubuntu2.5",
+      "purl": "pkg:deb/ubuntu/sudo@1.9.9-1ubuntu2.5?arch=amd64&distro=ubuntu-22.04"
+    },
+    {
+      "type": "library",
+      "name": "postgresql-14",
+      "version": "14.18-0ubuntu0.22.04.1",
+      "purl": "pkg:deb/ubuntu/postgresql-14@14.18-0ubuntu0.22.04.1?arch=amd64&distro=ubuntu-22.04"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+# Maps inventory names to the product names the feeds use. First matching rule wins.
+#   match           regex on the Intune display name, or on a package URL without the version
+#   cpe             NVD vendor:product, for desktop apps (see `patchwatch suggest`)
+#   kev             regex on "vendor|product" as written in the CISA KEV catalog
+#   eol             endoflife.date product, for end-of-support and release checks
+#   watch_releases  also notify (weekly) when a newer release is out, even without a CVE
+#   ignore          don't track (for example apps the vendor updates automatically)
+
+- match: '^Google Chrome'
+  name: Google Chrome
+  cpe: google:chrome
+  kev: '^Google\|Chrom'   # no eol: browsers ship every 4 weeks, so end-of-support alerts are noise
+- match: '^Mozilla Firefox'
+  name: Mozilla Firefox
+  cpe: mozilla:firefox
+  kev: '^Mozilla\|Firefox'
+- match: '^Notepad\+\+'
+  name: Notepad++
+  cpe: 'notepad-plus-plus:notepad\+\+'
+  kev: '^Notepad\+\+\|'
+  eol: notepad-plus-plus
+- match: '^WinRAR'
+  name: WinRAR
+  cpe: rarlab:winrar
+  kev: '^RARLAB\|WinRAR'
+- match: '^7-Zip'
+  name: 7-Zip
+  cpe: 7-zip:7-zip
+  kev: '^7-Zip\|'
+- match: '^PuTTY'
+  name: PuTTY
+  cpe: putty:putty
+- match: '^Zoom Workplace'
+  name: Zoom Workplace
+  cpe: zoom:workplace_desktop
+  kev: '^Zoom\|'
+- match: '^Python 3\.'
+  name: Python
+  cpe: python:python
+  eol: python
+- match: '^Microsoft Teams'
+  ignore: true          # updated by Microsoft; covered by Microsoft 365 service health
+
+# Packages from SBOMs and container images (matched through OSV automatically)
+- match: '^pkg:pypi/django$'
+  eol: django
+- match: '^pkg:npm/next$'
+  eol: nextjs
+  watch_releases: true

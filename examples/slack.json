@@ -1,0 +1,119 @@
+{
+  "text": "patchwatch: 7 urgent, 7 other",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "patchwatch: 7 urgent, 7 other"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *Notepad++ 8.8.1*  ·  37 endpoints\n• On CISA KEV: CVE-2025-15556 (added 2026-02-12)\n`1 vulnerability · fix: upgrade to 8.8.9 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *WinRAR 7.01.0*  ·  12 endpoints\n• On CISA KEV: CVE-2025-8088 (added 2025-08-12), CVE-2025-6218 (added 2025-12-09)\n• Used in ransomware campaigns: CVE-2025-8088\n• Advisory says it is exploited in the wild: CVE-2025-8088\n`2 vulnerabilities · fix: upgrade to 7.13 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *ingress-nginx 1.11.3*  ·  1 workload · internet-facing: prod-aks/ingress-nginx/ingress-nginx-controller (Service type LoadBalancer)\n• Unauthenticated network RCE on an internet-facing asset: CVE-2025-1974 (CVSS 9.8)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-1098 (EPSS 86%), CVE-2023-5044 (EPSS 54%), CVE-2025-24514 (EPSS 37%) and 1 more\n`5 vulnerabilities · fix: upgrade to 1.11.5 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *next 15.1.3*  ·  1 workload · internet-facing: prod-aks/shop/storefront (Ingress shop.contoso.com)\n• Unauthenticated network auth bypass on an internet-facing asset: CVE-2025-29927 (CVSS 9.1)\n• Unauthenticated network RCE on an internet-facing asset: GHSA-9qr9-h5gf-34mp (CVSS 10.0), CVE-2026-75604 (CVSS 9.0), GHSA-2464-fhr4-w9xw (CVSS 9.0) and 1 more\n• Likely to be exploited soon (EPSS >= 10%): CVE-2026-44578 (EPSS 36%)\n`6 vulnerabilities · fix: upgrade to 15.5.28 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *openssh-server 10.0_p1-r7*  ·  1 workload\n• Zero-day (added to CISA KEV in the last 14 days): CVE-2026-123158 (added 12d ago)\n`1 vulnerability · fix: upgrade to 10.0_p1-r11 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *react-server-dom-webpack 19.0.0*  ·  1 workload · internet-facing: prod-aks/shop/storefront (Ingress shop.contoso.com)\n• On CISA KEV: CVE-2025-55182 (added 2025-12-05)\n• Used in ransomware campaigns: CVE-2025-55182\n• Unauthenticated network RCE on an internet-facing asset: CVE-2025-55182 (CVSS 10.0), CVE-2026-126187 (CVSS 9.0)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-55184 (EPSS 64%), CVE-2025-55183 (EPSS 64%)\n`4 vulnerabilities · fix: upgrade to 19.0.9 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *sudo 1.9.15p5-3ubuntu5*  ·  1 server · internet-facing: web-01 (listed as internet-facing in config)\n• On CISA KEV: CVE-2025-32463 (added 2025-09-29)\n`1 vulnerability · fix: upgrade to 1.9.15p5-3ubuntu5.24.04.1 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *Google Chrome 157.0.8103.50*  ·  157 endpoints\n• Critical RCE in a desktop app: CVE-2026-130929 (CVSS 9.0), CVE-2026-131020 (CVSS 9.0)\n`2 vulnerabilities · fix: upgrade to 158.0.8127.36 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *django 5.1.4*  ·  1 workload\n• Critical and likely to be exploited: CVE-2025-64459 (CVSS 9.1, EPSS 19%)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-57833 (EPSS 27%), CVE-2025-32873 (EPSS 14%)\n`3 vulnerabilities · fix: upgrade to 5.1.14 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *libssl3 3.0.15-1~deb12u1*  ·  1 workload\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-15467 (EPSS 75%)\n`1 vulnerability · fix: upgrade to 3.0.18-1~deb12u2 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *libssl3 3.3.3-r0*  ·  1 workload · internet-facing: prod-aks/shop/storefront (Ingress shop.contoso.com)\n• Critical and internet-facing: CVE-2025-9230 (CVSS 9.8), CVE-2026-31789 (CVSS 9.8), CVE-2026-63073 (CVSS 9.8) and 2 more\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-15467 (EPSS 75%)\n`6 vulnerabilities · fix: upgrade to 3.3.7-r1 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *libssl3t64 3.0.13-0ubuntu3.5*  ·  1 server · internet-facing: web-01 (listed as internet-facing in config)\n• Critical and internet-facing: CVE-2025-9230 (CVSS 9.8), CVE-2026-31789 (CVSS 9.8), CVE-2026-34182 (CVSS 9.1) and 1 more\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-15467 (EPSS 75%)\n`5 vulnerabilities · fix: upgrade to 3.0.13-0ubuntu3.15 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *nginx 1.24.0-2ubuntu7.1*  ·  1 server · internet-facing: web-01 (listed as internet-facing in config)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2026-42945 (EPSS 69%), CVE-2026-49975 (EPSS 32%), CVE-2026-123007 (EPSS 30%) and 4 more\n`7 vulnerabilities · fix: upgrade to 1.24.0-2ubuntu7.20 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🟠 *openssh-server 1:9.6p1-3ubuntu13.5*  ·  1 server · internet-facing: web-01 (listed as internet-facing in config)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2025-26466 (EPSS 39%)\n`1 vulnerability · fix: upgrade to 1:9.6p1-3ubuntu13.8 or later`"
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Not affected? `patchwatch ack <CVE> --product <name> --reason \"…\"`"
+        }
+      ]
+    }
+  ]
+}

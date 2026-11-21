@@ -1,0 +1,29 @@
+# patchwatch demo configuration. Paths are relative to this file.
+# Everything here is fictional: Contoso devices, servers and a small AKS cluster.
+
+inventory:
+  intune:
+    file: inventory/intune/detectedApps.json   # Graph /deviceManagement/detectedApps response
+  server_sboms:
+    - inventory/servers                        # CycloneDX JSON, one file per host (syft output)
+  kubernetes:
+    file: inventory/k8s/cluster.json           # kubectl get pods,services,ingresses -A -o json (+ version)
+    sbom_dir: inventory/k8s/sboms              # one CycloneDX SBOM per image
+
+mappings: mappings.yaml
+feeds_dir: feeds                               # recorded feed responses used in replay mode
+
+exposure:
+  internet_facing: [web-01]                    # servers; Kubernetes exposure is read from Services and Ingresses
+
+nvd_lookback_days: 120
+
+triage:
+  zero_day_days: 14
+  epss_threshold: 0.10
+  critical_score: 9.0
+  eol_warning_days: 90
+
+notify:
+  slack_webhook_env: SLACK_WEBHOOK_URL
+  teams_webhook_env: TEAMS_WEBHOOK_URL

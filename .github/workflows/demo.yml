@@ -1,0 +1,35 @@
+# Runs patchwatch every day on the demo inventory and recorded feeds, and shows the
+# report on the run's summary page. The Slack and Teams messages it would send are
+# attached as an artifact.
+#
+# To run it for real: add SLACK_WEBHOOK_URL / TEAMS_WEBHOOK_URL secrets, point --config at
+# your own config, add --live, and drop --dry-run. Keep state.db between runs (for example
+# with actions/cache) so the same finding isn't sent twice.
+name: daily demo
+
+on:
+  schedule:
+    - cron: "40 14 * * *"   # 06:40 Pacific
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  patchwatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Run patchwatch (demo data, recorded feeds)
+        run: |
+          patchwatch run --config demo/config.yaml --report out/report.md --json out/findings.json \
+            --notify --dry-run --payload-dir out
+          cat out/report.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: patchwatch-output
+          path: out/
