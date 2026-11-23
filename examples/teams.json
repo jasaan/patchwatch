@@ -17,7 +17,7 @@
             "size": "Large",
             "weight": "Bolder",
             "wrap": true,
-            "text": "patchwatch: 7 urgent, 7 other"
+            "text": "ExploitWatch: 7 urgent, 7 other"
           },
           {
             "type": "TextBlock",

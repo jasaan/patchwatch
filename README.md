@@ -1,4 +1,4 @@
-# patchwatch
+# ExploitWatch
 
 **Matches what your company runs (Intune laptops, Linux servers, Kubernetes) against free vulnerability feeds, and tells the team only about what needs action: vulnerabilities being exploited right now, zero-days, and network-reachable RCEs and auth bypasses. Everything else is logged, not sent.**
 
@@ -49,7 +49,7 @@ Some choices that keep the noise down:
   - Every alert names the asset and why it counts, for example `prod-aks/shop/storefront (Ingress shop.contoso.com)`.
 - **One alert per product version.** It lists each reason with the CVEs behind it, the devices or workloads affected, and the lowest version that fixes them all.
 - **Repeat alerts are suppressed.** A finding is sent once. It's sent again only if it moves up a tier, for example when a digest CVE lands on KEV.
-- **Acknowledgements are recorded.** `patchwatch ack` silences a CVE for one product and records who decided and why.
+- **Acknowledgements are recorded.** `exploitwatch ack` silences a CVE for one product and records who decided and why.
 
 ## Where the data comes from
 
@@ -67,7 +67,7 @@ Some choices that keep the noise down:
 | [EPSS](https://www.first.org/epss/) | Probability of exploitation in the next 30 days |
 | [endoflife.date](https://endoflife.date) | End-of-support dates and latest releases |
 
-Intune names apps loosely ("Google Chrome", "Google Chrome (x64)"), so [`mappings.yaml`](demo/mappings.yaml) maps them to NVD product IDs. `patchwatch suggest --live` proposes IDs for unmapped apps from the NVD product dictionary. Apps with no mapping appear under **Gaps** in every report; they're never dropped silently.
+Intune names apps loosely ("Google Chrome", "Google Chrome (x64)"), so [`mappings.yaml`](demo/mappings.yaml) maps them to NVD product IDs. `exploitwatch suggest --live` proposes IDs for unmapped apps from the NVD product dictionary. Apps with no mapping appear under **Gaps** in every report; they're never dropped silently.
 
 ## Try it (no accounts needed)
 
@@ -75,13 +75,13 @@ Intune names apps loosely ("Google Chrome", "Google Chrome (x64)"), so [`mapping
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
-patchwatch run                                   # demo inventory + recorded feeds → report
-patchwatch run --notify --dry-run                # also write the Slack/Teams messages to out/
-patchwatch ack CVE-2025-15556 --product "Notepad++" --reason "updater disabled by GPO"
+exploitwatch run                                   # demo inventory + recorded feeds → report
+exploitwatch run --notify --dry-run                # also write the Slack/Teams messages to out/
+exploitwatch ack CVE-2025-15556 --product "Notepad++" --reason "updater disabled by GPO"
 pytest -q                                        # 49 tests, no network
 ```
 
-Replay mode uses the snapshot's recording date as "today", so results don't drift. To fetch current data instead, run `patchwatch run --live`. Set `NVD_API_KEY` ([free key](https://nvd.nist.gov/developers/request-an-api-key)) to make it about 10× faster.
+Replay mode uses the snapshot's recording date as "today", so results don't drift. To fetch current data instead, run `exploitwatch run --live`. Set `NVD_API_KEY` ([free key](https://nvd.nist.gov/developers/request-an-api-key)) to make it about 10× faster.
 
 ## Run it on your own environment
 
@@ -93,7 +93,7 @@ Replay mode uses the snapshot's recording date as "today", so results don't drif
    - Slack: set `SLACK_WEBHOOK_URL` (incoming webhook).
    - Teams: set `TEAMS_WEBHOOK_URL`, using a **Workflows** webhook ("Send webhook alerts to a channel"). The old Office 365 connector webhooks are retired.
 6. **Schedule it:**
-   - Daily: `patchwatch run --live --notify` (urgent and digest).
+   - Daily: `exploitwatch run --live --notify` (urgent and digest).
    - Weekly: `--tiers weekly`.
    - Keep `state.db` between runs so nobody gets the same alert twice. [`demo.yml`](.github/workflows/demo.yml) runs the demo daily in GitHub Actions and puts the report on the run's summary page.
 
@@ -103,15 +103,15 @@ Replay mode uses the snapshot's recording date as "today", so results don't drif
 
 - **Desktop app version matching is approximate.** It compares dotted versions loosely (157.0.8103.50, 8.8.1, 10.6p1). Package versions are compared by OSV, which knows each ecosystem's rules.
 - **NVD only allows 120-day search windows.** So desktop apps are checked against CVEs from the last 120 days **plus every KEV entry for the product**, whatever its age. An old CVE that isn't on KEV and was never patched on a laptop would be missed.
-- **CVE platform conditions are ignored.** Some NVD records say "affected only on platform X" (WinRAR **on Windows**). patchwatch assumes the platform matches.
+- **CVE platform conditions are ignored.** Some NVD records say "affected only on platform X" (WinRAR **on Windows**). ExploitWatch assumes the platform matches.
 - **It can't tell whether vulnerable code is reachable.** "Internet-facing" is per workload: an OpenSSL CVE in a public container counts as internet-facing even if the app never uses that OpenSSL feature. Use `ack` for those.
 - **Vendor feeds aren't read yet.** Exploitation signals come from KEV and NVD descriptions. Reading MSRC's "Exploited: Yes" flag and vendor security advisory feeds (CSAF) is the next step.
-- **How it compares to OWASP Dependency-Track:** Dependency-Track is the better tool for SBOM portfolios alone. patchwatch adds Intune desktop apps, Kubernetes exposure, end-of-support tracking, and a deliberately small alert surface for a small security team.
+- **How it compares to OWASP Dependency-Track:** Dependency-Track is the better tool for SBOM portfolios alone. ExploitWatch adds Intune desktop apps, Kubernetes exposure, end-of-support tracking, and a deliberately small alert surface for a small security team.
 
 ## Layout
 
 ```
-patchwatch/
+exploitwatch/
   inventory.py   Intune, SBOM and Kubernetes readers; mapping rules; exposure
   feeds.py       KEV, NVD, OSV, EPSS, endoflife.date clients; live / record / replay
   match.py       OSV and NVD matching, merged by CVE; CVSS and CWE enrichment

@@ -16,6 +16,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[dev]"
-      - run: ruff check patchwatch tests tools
-      - run: ruff format --check patchwatch tests tools
+      - run: ruff check exploitwatch tests tools
+      - run: ruff format --check exploitwatch tests tools
       - run: pytest -q

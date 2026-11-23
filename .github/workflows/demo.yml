@@ -1,4 +1,4 @@
-# Runs patchwatch every day on the demo inventory and recorded feeds, and shows the
+# Runs ExploitWatch every day on the demo inventory and recorded feeds, and shows the
 # report on the run's summary page. The Slack and Teams messages it would send are
 # attached as an artifact.
 #
@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  patchwatch:
+  exploitwatch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,12 +24,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .
-      - name: Run patchwatch (demo data, recorded feeds)
+      - name: Run ExploitWatch (demo data, recorded feeds)
         run: |
-          patchwatch run --config demo/config.yaml --report out/report.md --json out/findings.json \
+          exploitwatch run --config demo/config.yaml --report out/report.md --json out/findings.json \
             --notify --dry-run --payload-dir out
           cat out/report.md >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
-          name: patchwatch-output
+          name: exploitwatch-output
           path: out/

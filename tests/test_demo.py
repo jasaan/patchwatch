@@ -5,12 +5,12 @@ from pathlib import Path
 
 import pytest
 
-from patchwatch import inventory, notify
-from patchwatch.cli import load_config, main
-from patchwatch.feeds import Feeds
-from patchwatch.match import add_epss, match_software
-from patchwatch.report import group
-from patchwatch.triage import triage
+from exploitwatch import inventory, notify
+from exploitwatch.cli import load_config, main
+from exploitwatch.feeds import Feeds
+from exploitwatch.match import add_epss, match_software
+from exploitwatch.report import group
+from exploitwatch.triage import triage
 
 DEMO = Path(__file__).resolve().parent.parent / "demo" / "config.yaml"
 

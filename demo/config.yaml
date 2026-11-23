@@ -1,4 +1,4 @@
-# patchwatch demo configuration. Paths are relative to this file.
+# ExploitWatch demo configuration. Paths are relative to this file.
 # Everything here is fictional: Contoso devices, servers and a small AKS cluster.
 
 inventory:

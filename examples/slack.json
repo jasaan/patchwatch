@@ -1,11 +1,11 @@
 {
-  "text": "patchwatch: 7 urgent, 7 other",
+  "text": "ExploitWatch: 7 urgent, 7 other",
   "blocks": [
     {
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "patchwatch: 7 urgent, 7 other"
+        "text": "ExploitWatch: 7 urgent, 7 other"
       }
     },
     {
@@ -111,7 +111,7 @@
       "elements": [
         {
           "type": "mrkdwn",
-          "text": "Not affected? `patchwatch ack <CVE> --product <name> --reason \"…\"`"
+          "text": "Not affected? `exploitwatch ack <CVE> --product <name> --reason \"…\"`"
         }
       ]
     }

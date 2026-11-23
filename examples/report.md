@@ -1,4 +1,4 @@
-# patchwatch report: 2026-11-21
+# ExploitWatch report: 2026-11-21
 
 29 products checked. **7 urgent**, 7 for the daily digest, 5 for weekly planning, and 863 lower-risk findings logged without a notification.
 

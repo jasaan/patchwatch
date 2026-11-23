@@ -2,12 +2,12 @@ from datetime import date
 
 import pytest
 
-from patchwatch.inventory import Catalog, _split_image, add_cluster, exposed_services
-from patchwatch.match import nvd_affects, osv_query_for, parse_purl, vuln_from_osv
-from patchwatch.models import Asset, Finding, Software, Vuln
-from patchwatch.state import State
-from patchwatch.triage import DEFAULTS, attack_class, classify
-from patchwatch.versions import compare, cvss3_score, in_range
+from exploitwatch.inventory import Catalog, _split_image, add_cluster, exposed_services
+from exploitwatch.match import nvd_affects, osv_query_for, parse_purl, vuln_from_osv
+from exploitwatch.models import Asset, Finding, Software, Vuln
+from exploitwatch.state import State
+from exploitwatch.triage import DEFAULTS, attack_class, classify
+from exploitwatch.versions import compare, cvss3_score, in_range
 
 
 # ---------------------------------------------------------------- versions

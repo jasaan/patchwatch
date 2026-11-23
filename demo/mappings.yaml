@@ -1,6 +1,6 @@
 # Maps inventory names to the product names the feeds use. First matching rule wins.
 #   match           regex on the Intune display name, or on a package URL without the version
-#   cpe             NVD vendor:product, for desktop apps (see `patchwatch suggest`)
+#   cpe             NVD vendor:product, for desktop apps (see `exploitwatch suggest`)
 #   kev             regex on "vendor|product" as written in the CISA KEV catalog
 #   eol             endoflife.date product, for end-of-support and release checks
 #   watch_releases  also notify (weekly) when a newer release is out, even without a CVE
