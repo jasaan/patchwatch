@@ -1,0 +1,91 @@
+# Maps inventory names to the product names the feeds use. First matching rule wins.
+#   match             regex on the Intune display name, "<OS> <build>" for devices, an appliance's
+#                     product, or a package URL without the version
+#   name              display name in alerts
+#   cpe               NVD vendor:product, for desktop apps (`exploitwatch suggest --live --live-intune`)
+#   kev               regex on "vendor|product" as written in the CISA KEV catalog
+#   advisories        a CSAF vendor from config.yaml (microsoft, cisco, ...)
+#   advisory_product  regex on that vendor's product names (`exploitwatch products cisco --live --search ASA`)
+#   same_line         leading version parts that must match an advisory's (3 for Windows builds)
+#   eol               endoflife.date product, for end-of-support checks
+#   ignore            don't track
+#
+# After the first run, check the report's "Gaps" section and add rules for what matters.
+
+# ---- Operating systems (Intune devices) ----
+- match: '^Windows 10\.0\.'
+  name: Windows
+  advisories: microsoft
+  advisory_product: '^Windows 1[01] Version .* for x64-based Systems$'
+  same_line: 3
+
+# ---- Microsoft apps ----
+- match: '^Microsoft Edge$'
+  name: Microsoft Edge
+  advisories: microsoft
+  advisory_product: '^Microsoft Edge \(Chromium-based\)$'
+- match: '^Microsoft 365 Apps for (enterprise|business)'
+  name: Microsoft 365 Apps
+  advisories: microsoft
+  advisory_product: '^Microsoft 365 Apps for Enterprise for 64-bit Systems$'
+- match: '^Microsoft (Teams|OneDrive)|^Microsoft Edge (Update|WebView2)'
+  ignore: true          # updated by Microsoft automatically
+
+# ---- Common desktop apps (NVD) ----
+- match: '^Google Chrome'
+  name: Google Chrome
+  cpe: google:chrome
+  kev: '^Google\|Chrom'
+- match: '^Mozilla Firefox'
+  name: Mozilla Firefox
+  cpe: mozilla:firefox
+  kev: '^Mozilla\|Firefox'
+- match: '^Notepad\+\+'
+  name: Notepad++
+  cpe: 'notepad-plus-plus:notepad\+\+'
+  kev: '^Notepad\+\+\|'
+- match: '^WinRAR'
+  name: WinRAR
+  cpe: rarlab:winrar
+  kev: '^RARLAB\|WinRAR'
+- match: '^7-Zip'
+  name: 7-Zip
+  cpe: 7-zip:7-zip
+  kev: '^7-Zip\|'
+- match: '^PuTTY'
+  name: PuTTY
+  cpe: putty:putty
+- match: '^Zoom Workplace'
+  name: Zoom Workplace
+  cpe: zoom:workplace_desktop
+  kev: '^Zoom\|'
+- match: '^Python 3\.'
+  name: Python
+  cpe: python:python
+  eol: python
+
+# ---- Appliances (appliances.yaml) ----
+- match: '^Cisco (Secure Firewall )?ASA|Adaptive Security Appliance'
+  name: Cisco Secure Firewall ASA
+  advisories: cisco
+  advisory_product: 'Adaptive Security Appliance \(ASA\) Software'
+- match: '^Cisco (Secure )?Firewall Threat Defense|^Cisco FTD'
+  name: Cisco Secure Firewall Threat Defense
+  advisories: cisco
+  advisory_product: 'Firewall Threat Defense \(FTD\) Software'
+- match: '^Cisco Secure Client|AnyConnect'
+  name: Cisco Secure Client
+  advisories: cisco
+  advisory_product: '^Cisco Secure Client'
+- match: '^FortiGate|FortiOS'
+  name: FortiGate FortiOS
+  cpe: fortinet:fortios
+  kev: '^Fortinet\|FortiOS'
+- match: '^Palo Alto|PAN-OS'
+  name: Palo Alto PAN-OS
+  cpe: paloaltonetworks:pan-os
+  kev: '^Palo Alto Networks\|PAN-OS'
+- match: '^Ivanti Connect Secure'
+  name: Ivanti Connect Secure
+  cpe: ivanti:connect_secure
+  kev: '^Ivanti\|Connect Secure'

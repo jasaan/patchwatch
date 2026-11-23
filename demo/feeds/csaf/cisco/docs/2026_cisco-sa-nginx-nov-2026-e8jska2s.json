@@ -1,0 +1,82 @@
+{
+ "_updated": "2026-11-23T20:14:51Z",
+ "_v": 2,
+ "id": "cisco-sa-nginx-nov-2026-e8jska2s",
+ "products": {},
+ "published": "2026-11-20T16:00:00+00:00",
+ "title": "Vulnerabilities in nginx Affecting Cisco Products: November 2026",
+ "updated": "2026-11-23T20:14:39+00:00",
+ "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-nginx-nov-2026-e8jska2s",
+ "vulns": [
+  {
+   "affected": [],
+   "cve": "CVE-2026-113425",
+   "cwes": [],
+   "disclosed": false,
+   "exploited": false,
+   "fix_urls": {},
+   "fixed": [],
+   "note": "",
+   "score": 8.1,
+   "some_exploited": "",
+   "title": "NGINX2Root:RCE",
+   "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  },
+  {
+   "affected": [],
+   "cve": "CVE-2026-121810",
+   "cwes": [],
+   "disclosed": false,
+   "exploited": false,
+   "fix_urls": {},
+   "fixed": [],
+   "note": "",
+   "score": 8.1,
+   "some_exploited": "",
+   "title": "NGINX2Root:RCE",
+   "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  },
+  {
+   "affected": [],
+   "cve": "CVE-2026-123007",
+   "cwes": [],
+   "disclosed": false,
+   "exploited": false,
+   "fix_urls": {},
+   "fixed": [],
+   "note": "",
+   "score": 8.1,
+   "some_exploited": "",
+   "title": "NGINX2Root:RCE",
+   "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  },
+  {
+   "affected": [],
+   "cve": "CVE-2026-123633",
+   "cwes": [],
+   "disclosed": false,
+   "exploited": false,
+   "fix_urls": {},
+   "fixed": [],
+   "note": "",
+   "score": 8.1,
+   "some_exploited": "",
+   "title": "NGINX2Root:RCE",
+   "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  },
+  {
+   "affected": [],
+   "cve": "CVE-2026-123634",
+   "cwes": [],
+   "disclosed": false,
+   "exploited": false,
+   "fix_urls": {},
+   "fixed": [],
+   "note": "",
+   "score": 8.1,
+   "some_exploited": "",
+   "title": "NGINX2Root:RCE",
+   "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  }
+ ]
+}

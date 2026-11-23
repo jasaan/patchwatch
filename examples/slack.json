@@ -1,11 +1,18 @@
 {
-  "text": "ExploitWatch: 7 urgent, 7 other",
+  "text": "ExploitWatch: 11 urgent, 7 other",
   "blocks": [
     {
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "ExploitWatch: 7 urgent, 7 other"
+        "text": "ExploitWatch: 11 urgent, 7 other"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *Windows 11 24H2 10.0.26100.9580*  ·  45 endpoints\n• On CISA KEV: CVE-2026-96951 (added 2026-10-13)\n• Vendor says it is exploited: CVE-2026-96951 (Microsoft)\n• Critical RCE in the endpoint operating system: CVE-2026-112967 (CVSS 9.8), CVE-2026-116928 (CVSS 9.8), CVE-2026-119958 (CVSS 9.8) and 13 more\n• Critical auth bypass in the endpoint operating system: CVE-2026-85844 (CVSS 9.8)\n`18 vulnerabilities · fix: upgrade to 10.0.26100.9974 or later`\n<https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951|Microsoft CVE-2026-96951> · <https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112967|Microsoft CVE-2026-112967> · <https://support.microsoft.com/help/5127648|Update>"
       }
     },
     {
@@ -19,7 +26,28 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
+        "text": "🔴 *Microsoft Edge 154.0.4258.37*  ·  28 endpoints\n• On CISA KEV: CVE-2026-96951 (added 2026-10-13)\n• Vendor says it is exploited: CVE-2026-96951 (Microsoft)\n`1 vulnerability · fix: upgrade to 154.0.4258.62 or later`\n<https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951|Microsoft CVE-2026-96951> · <https://learn.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security|Update>"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *Windows 10 22H2 10.0.19045.7725*  ·  15 endpoints\n• On CISA KEV: CVE-2026-96951 (added 2026-10-13)\n• Vendor says it is exploited: CVE-2026-96951 (Microsoft)\n• Critical RCE in the endpoint operating system: CVE-2026-112967 (CVSS 9.8), CVE-2026-116928 (CVSS 9.8), CVE-2026-119958 (CVSS 9.8) and 13 more\n• Critical auth bypass in the endpoint operating system: CVE-2026-85844 (CVSS 9.8)\n`18 vulnerabilities · fix: upgrade to 10.0.19045.7846 or later`\n<https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951|Microsoft CVE-2026-96951> · <https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112967|Microsoft CVE-2026-112967> · <https://support.microsoft.com/help/5126657|Update>"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
         "text": "🔴 *WinRAR 7.01.0*  ·  12 endpoints\n• On CISA KEV: CVE-2025-8088 (added 2025-08-12), CVE-2025-6218 (added 2025-12-09)\n• Used in ransomware campaigns: CVE-2025-8088\n• Advisory says it is exploited in the wild: CVE-2025-8088\n`2 vulnerabilities · fix: upgrade to 7.13 or later`"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "🔴 *Cisco Secure Firewall ASA 9.20.4.10*  ·  1 appliance · internet-facing: fw-edge-01 (AnyConnect VPN on the outside interface)\n• On CISA KEV: CVE-2026-20349 (added 2026-08-11), CVE-2026-76418 (added 2026-10-29)\n• Vendor says it is exploited: CVE-2026-20349 (Cisco), CVE-2026-76418 (Cisco)\n• Critical and internet-facing: CVE-2026-20329 (CVSS 9.9), CVE-2026-20330 (CVSS 9.9), CVE-2026-20332 (CVSS 9.9) and 1 more\n`6 vulnerabilities`\n<https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-vpn-dos-dzv4mQFF|Cisco CVE-2026-20349> · <https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-tunnel-dos-s6mgkb75|Cisco CVE-2026-76418> · <https://software.cisco.com|Update>"
       }
     },
     {
@@ -96,7 +124,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "🟠 *nginx 1.24.0-2ubuntu7.1*  ·  1 server · internet-facing: web-01 (listed as internet-facing in config)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2026-42945 (EPSS 69%), CVE-2026-49975 (EPSS 32%), CVE-2026-123007 (EPSS 30%) and 4 more\n`7 vulnerabilities · fix: upgrade to 1.24.0-2ubuntu7.20 or later`"
+        "text": "🟠 *nginx 1.24.0-2ubuntu7.1*  ·  1 server · internet-facing: web-01 (listed as internet-facing in config)\n• Likely to be exploited soon (EPSS >= 10%): CVE-2026-42945 (EPSS 69%), CVE-2026-49975 (EPSS 32%), CVE-2026-123007 (EPSS 30%) and 4 more\n`7 vulnerabilities · fix: upgrade to 1.24.0-2ubuntu7.20 or later`\n<https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-nginx-nov-2026-e8jska2s|Cisco CVE-2026-113425>"
       }
     },
     {

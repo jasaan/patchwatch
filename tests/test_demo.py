@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from exploitwatch import inventory, notify
+from exploitwatch.advisories import Advisories
 from exploitwatch.cli import load_config, main
 from exploitwatch.feeds import Feeds
 from exploitwatch.match import add_epss, match_software
@@ -20,7 +21,9 @@ def run():
     config, base = load_config(str(DEMO))
     feeds = Feeds("replay", base / config["feeds_dir"])
     catalog = inventory.build(config, base)
-    results = {sw.key: match_software(sw, feeds, config["nvd_lookback_days"]) for sw in catalog.software}
+    adv = Advisories(feeds, config["advisories"])
+    results = {sw.key: match_software(sw, feeds, config["nvd_lookback_days"], adv) for sw in catalog.software}
+    catalog.gaps += adv.gaps
     add_epss(results, feeds)
     findings = [f for sw in catalog.software for f in triage(sw, results[sw.key], feeds, feeds.today, config["triage"])]
     return catalog, findings, feeds
@@ -48,7 +51,41 @@ def test_urgent_alerts(run):
         "openssh-server 10.0_p1-r7",  # KEV added 12 days ago: zero-day rule
         "ingress-nginx 1.11.3",  # CVE-2025-1974, unauthenticated RCE behind a LoadBalancer
         "next 15.1.3",  # CVE-2025-29927 middleware auth bypass on the public storefront
+        # from vendor advisories
+        "Windows 11 24H2 10.0.26100.9580",  # missed October: Microsoft says CVE-2026-96951 is exploited
+        "Windows 10 22H2 10.0.19045.7725",  # same, on Windows 10
+        "Microsoft Edge 154.0.4258.37",  # CVE-2026-96951 also lists Edge
+        "Cisco Secure Firewall ASA 9.20.4.10",  # Cisco PSIRT: CVE-2026-76418 actively exploited
     }
+
+
+def _finding(findings, product, cve):
+    return next(
+        f for f in findings if f.vuln and f.vuln.id == cve and f.software.name + " " + f.software.version == product
+    )
+
+
+def test_vendor_exploited_reason_and_fix(run):
+    _, findings, _ = run
+    f = _finding(findings, "Windows 11 24H2 10.0.26100.9580", "CVE-2026-96951")
+    assert "Vendor says it is exploited" in f.reasons and f.notes["Vendor says it is exploited"] == "Microsoft"
+    alert = next(a for a in group(findings) if a.title == "Windows 11 24H2 10.0.26100.9580" and a.tier == "urgent")
+    assert alert.fix == "10.0.26100.9974"  # November's build fixes everything in the window
+    assert alert.links()[0][1] == "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951"
+    asa = _finding(findings, "Cisco Secure Firewall ASA 9.20.4.10", "CVE-2026-76418")
+    assert asa.vuln.kev and asa.vuln.vendor_exploited and asa.software.exposed
+
+
+def test_patched_windows_is_quiet(run):
+    _, findings, _ = run
+    noisy = {f.software.name + " " + f.software.version for f in findings if f.tier != "log"}
+    assert not any(n.endswith("10.0.26100.9974") or n.endswith("10.0.26200.9974") for n in noisy)
+
+
+def test_vendor_gaps(run):
+    catalog, _, _ = run
+    assert any("CVE-2026-124194" in g and "doesn't give versions" in g for g in catalog.gaps)  # Office
+    assert any("without naming which CVEs" in g for g in catalog.gaps)  # Cisco hardening bundle
 
 
 def test_browser_criticals_go_to_digest_not_urgent(run):

@@ -1,0 +1,40 @@
+# ExploitWatch starter configuration for a real environment.
+# Copy this folder somewhere private (it will hold your inventory and state), then:
+#   exploitwatch run --config starter/config.yaml --live --live-intune --save-inventory inventory/
+# Paths are relative to this file.
+
+inventory:
+  intune:
+    # Read live from Microsoft Graph with --live-intune. To re-run on a saved pull instead,
+    # point these at the files --save-inventory wrote:
+    # file: inventory/detectedApps.json
+    # devices_file: inventory/managedDevices.json
+  appliances:
+    file: appliances.yaml          # firewalls and VPN gateways; edit or remove
+  # server_sboms:
+  #   - sboms/servers              # CycloneDX JSON per host (syft / -o cyclonedx-json)
+  # kubernetes:
+  #   sbom_dir: sboms/images       # read the cluster live with --live-cluster
+
+mappings: mappings.yaml
+feeds_dir: feeds                   # only used with --record / replay
+
+exposure:
+  internet_facing: []              # server host names that face the internet
+
+nvd_lookback_days: 120
+
+advisories:
+  providers: [microsoft, cisco]    # add redhat, suse, siemens, cisa-ics, or any provider-metadata.json URL
+  lookback_days: 90
+  cache_dir: ~/.cache/exploitwatch
+
+triage:
+  zero_day_days: 14
+  epss_threshold: 0.10
+  critical_score: 9.0
+  eol_warning_days: 90
+
+notify:
+  slack_webhook_env: SLACK_WEBHOOK_URL
+  teams_webhook_env: TEAMS_WEBHOOK_URL

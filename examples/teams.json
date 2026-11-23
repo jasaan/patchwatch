@@ -17,7 +17,38 @@
             "size": "Large",
             "weight": "Bolder",
             "wrap": true,
-            "text": "ExploitWatch: 7 urgent, 7 other"
+            "text": "ExploitWatch: 11 urgent, 7 other"
+          },
+          {
+            "type": "TextBlock",
+            "weight": "Bolder",
+            "color": "Attention",
+            "wrap": true,
+            "separator": true,
+            "text": "Urgent: Windows 11 24H2 10.0.26100.9580"
+          },
+          {
+            "type": "TextBlock",
+            "isSubtle": true,
+            "wrap": true,
+            "spacing": "None",
+            "text": "45 endpoints"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "- On CISA KEV: CVE-2026-96951 (added 2026-10-13)\n- Vendor says it is exploited: CVE-2026-96951 (Microsoft)\n- Critical RCE in the endpoint operating system: CVE-2026-112967 (CVSS 9.8), CVE-2026-116928 (CVSS 9.8), CVE-2026-119958 (CVSS 9.8) and 13 more\n- Critical auth bypass in the endpoint operating system: CVE-2026-85844 (CVSS 9.8)"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "fontType": "Monospace",
+            "text": "18 vulnerabilities · fix: upgrade to 10.0.26100.9974 or later"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "[Microsoft CVE-2026-96951](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951) · [Microsoft CVE-2026-112967](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112967) · [Update](https://support.microsoft.com/help/5127648)"
           },
           {
             "type": "TextBlock",
@@ -51,6 +82,68 @@
             "color": "Attention",
             "wrap": true,
             "separator": true,
+            "text": "Urgent: Microsoft Edge 154.0.4258.37"
+          },
+          {
+            "type": "TextBlock",
+            "isSubtle": true,
+            "wrap": true,
+            "spacing": "None",
+            "text": "28 endpoints"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "- On CISA KEV: CVE-2026-96951 (added 2026-10-13)\n- Vendor says it is exploited: CVE-2026-96951 (Microsoft)"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "fontType": "Monospace",
+            "text": "1 vulnerability · fix: upgrade to 154.0.4258.62 or later"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "[Microsoft CVE-2026-96951](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951) · [Update](https://learn.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security)"
+          },
+          {
+            "type": "TextBlock",
+            "weight": "Bolder",
+            "color": "Attention",
+            "wrap": true,
+            "separator": true,
+            "text": "Urgent: Windows 10 22H2 10.0.19045.7725"
+          },
+          {
+            "type": "TextBlock",
+            "isSubtle": true,
+            "wrap": true,
+            "spacing": "None",
+            "text": "15 endpoints"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "- On CISA KEV: CVE-2026-96951 (added 2026-10-13)\n- Vendor says it is exploited: CVE-2026-96951 (Microsoft)\n- Critical RCE in the endpoint operating system: CVE-2026-112967 (CVSS 9.8), CVE-2026-116928 (CVSS 9.8), CVE-2026-119958 (CVSS 9.8) and 13 more\n- Critical auth bypass in the endpoint operating system: CVE-2026-85844 (CVSS 9.8)"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "fontType": "Monospace",
+            "text": "18 vulnerabilities · fix: upgrade to 10.0.19045.7846 or later"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "[Microsoft CVE-2026-96951](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951) · [Microsoft CVE-2026-112967](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112967) · [Update](https://support.microsoft.com/help/5126657)"
+          },
+          {
+            "type": "TextBlock",
+            "weight": "Bolder",
+            "color": "Attention",
+            "wrap": true,
+            "separator": true,
             "text": "Urgent: WinRAR 7.01.0"
           },
           {
@@ -70,6 +163,37 @@
             "wrap": true,
             "fontType": "Monospace",
             "text": "2 vulnerabilities · fix: upgrade to 7.13 or later"
+          },
+          {
+            "type": "TextBlock",
+            "weight": "Bolder",
+            "color": "Attention",
+            "wrap": true,
+            "separator": true,
+            "text": "Urgent: Cisco Secure Firewall ASA 9.20.4.10"
+          },
+          {
+            "type": "TextBlock",
+            "isSubtle": true,
+            "wrap": true,
+            "spacing": "None",
+            "text": "1 appliance · internet-facing: fw-edge-01 (AnyConnect VPN on the outside interface)"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "- On CISA KEV: CVE-2026-20349 (added 2026-08-11), CVE-2026-76418 (added 2026-10-29)\n- Vendor says it is exploited: CVE-2026-20349 (Cisco), CVE-2026-76418 (Cisco)\n- Critical and internet-facing: CVE-2026-20329 (CVSS 9.9), CVE-2026-20330 (CVSS 9.9), CVE-2026-20332 (CVSS 9.9) and 1 more"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "fontType": "Monospace",
+            "text": "6 vulnerabilities"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "[Cisco CVE-2026-20349](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-vpn-dos-dzv4mQFF) · [Cisco CVE-2026-76418](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-tunnel-dos-s6mgkb75) · [Update](https://software.cisco.com)"
           },
           {
             "type": "TextBlock",
@@ -356,6 +480,11 @@
             "wrap": true,
             "fontType": "Monospace",
             "text": "7 vulnerabilities · fix: upgrade to 1.24.0-2ubuntu7.20 or later"
+          },
+          {
+            "type": "TextBlock",
+            "wrap": true,
+            "text": "[Cisco CVE-2026-113425](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-nginx-nov-2026-e8jska2s)"
           },
           {
             "type": "TextBlock",

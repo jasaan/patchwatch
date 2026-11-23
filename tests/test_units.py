@@ -317,3 +317,74 @@ def test_notify_only_new_or_escalated(tmp_path):
     assert st.to_notify([up], {"urgent", "digest"}) == [up]
     st.ack("CVE-1", "App", "not reachable", "me")
     assert st.to_notify([up], {"urgent", "digest"}) == []
+
+
+# ---- Intune devices, appliances, unmapped apps ----
+def _rules(tmp_path, text):
+    from exploitwatch.inventory import load_rules
+
+    path = tmp_path / "m.yaml"
+    path.write_text(text)
+    return load_rules(path)
+
+
+WINDOWS_RULE = """
+- match: '^Windows 10\\.0\\.'
+  name: Windows
+  advisories: microsoft
+  advisory_product: '^Windows 1[01] Version .* for x64-based Systems$'
+  same_line: 3
+- match: '^Cisco (Secure Firewall )?ASA'
+  name: Cisco Secure Firewall ASA
+  advisories: cisco
+  advisory_product: 'Adaptive Security Appliance'
+"""
+
+
+def test_intune_devices_become_os_items(tmp_path):
+    from exploitwatch.inventory import add_intune_devices
+
+    rules = _rules(tmp_path, WINDOWS_RULE)
+    devices = [
+        {"id": "a", "deviceName": "LT-1", "operatingSystem": "Windows", "osVersion": "10.0.26100.9580"},
+        {"id": "b", "deviceName": "LT-2", "operatingSystem": "Windows", "osVersion": "10.0.26100.9580"},
+        {"id": "c", "deviceName": "LT-3", "operatingSystem": "Windows", "osVersion": "10.0.19045.7725"},
+        {"id": "d", "deviceName": "MAC-1", "operatingSystem": "macOS", "osVersion": "15.6.1"},
+    ]
+    cat = Catalog()
+    add_intune_devices(cat, devices, rules)
+    by_name = {f"{s.name} {s.version}": s for s in cat.software}
+    win11 = by_name["Windows 11 24H2 10.0.26100.9580"]
+    assert len(win11.assets) == 2 and win11.kind == "os" and win11.same_line == 3
+    assert "Windows 10 22H2 10.0.19045.7725" in by_name
+    assert cat.gaps == ["1 macOS device: operating system not assessed (no rule in mappings.yaml)."]
+
+
+def test_appliances(tmp_path):
+    from exploitwatch.inventory import add_appliances
+
+    rules = _rules(tmp_path, WINDOWS_RULE)
+    cat = Catalog()
+    add_appliances(
+        cat,
+        [
+            {"host": "fw-1", "product": "Cisco Secure Firewall ASA", "version": "9.20.4.10", "internet_facing": True},
+            {"host": "lb-1", "product": "Acme Load Balancer", "version": 3.1},
+        ],
+        rules,
+    )
+    (asa,) = cat.software
+    assert asa.advisories == "cisco" and asa.exposed and asa.assets[0].type == "appliance"
+    assert asa.assets[0].exposure == "listed as internet-facing"
+    assert cat.gaps == ["Appliance not mapped to a product: Acme Load Balancer 3.1 (lb-1). Add a rule."]
+
+
+def test_unmapped_apps_are_ranked_and_capped(tmp_path):
+    from exploitwatch.inventory import MAX_UNMAPPED_SHOWN, add_intune
+
+    apps = [{"id": str(i), "displayName": f"App {i}", "version": "1.0", "deviceCount": i} for i in range(1, 41)]
+    cat = Catalog()
+    add_intune(cat, apps, _rules(tmp_path, WINDOWS_RULE))
+    assert len(cat.gaps) == MAX_UNMAPPED_SHOWN + 1
+    assert "App 40 1.0 (40 devices)" in cat.gaps[0]
+    assert cat.gaps[-1].startswith("…and 15 more unmapped Intune apps on 120 device installs")

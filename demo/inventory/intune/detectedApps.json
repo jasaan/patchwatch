@@ -8197,6 +8197,768 @@
           "operatingSystem": "Windows"
         }
       ]
+    },
+    {
+      "id": "0013a3f1c2b7e9d00000000d0013",
+      "displayName": "Microsoft Edge",
+      "version": "154.0.4258.37",
+      "publisher": "Microsoft Corporation",
+      "platform": "windows",
+      "sizeInByte": 247869421,
+      "deviceCount": 28,
+      "managedDevices": [
+        {
+          "id": "000001bc-0000-4000-8000-c0ffee000444",
+          "deviceName": "CONTOSO-LT-444",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000011f-0000-4000-8000-c0ffee000287",
+          "deviceName": "CONTOSO-LT-287",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001b7-0000-4000-8000-c0ffee000439",
+          "deviceName": "CONTOSO-LT-439",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000190-0000-4000-8000-c0ffee000400",
+          "deviceName": "CONTOSO-LT-400",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ef-0000-4000-8000-c0ffee000239",
+          "deviceName": "CONTOSO-LT-239",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000e8-0000-4000-8000-c0ffee000232",
+          "deviceName": "CONTOSO-LT-232",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000105-0000-4000-8000-c0ffee000261",
+          "deviceName": "CONTOSO-LT-261",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001b6-0000-4000-8000-c0ffee000438",
+          "deviceName": "CONTOSO-LT-438",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000012d-0000-4000-8000-c0ffee000301",
+          "deviceName": "CONTOSO-LT-301",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000062-0000-4000-8000-c0ffee000098",
+          "deviceName": "CONTOSO-LT-098",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000005f-0000-4000-8000-c0ffee000095",
+          "deviceName": "CONTOSO-LT-095",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000019c-0000-4000-8000-c0ffee000412",
+          "deviceName": "CONTOSO-LT-412",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000107-0000-4000-8000-c0ffee000263",
+          "deviceName": "CONTOSO-LT-263",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000f4-0000-4000-8000-c0ffee000244",
+          "deviceName": "CONTOSO-LT-244",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000143-0000-4000-8000-c0ffee000323",
+          "deviceName": "CONTOSO-LT-323",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000013b-0000-4000-8000-c0ffee000315",
+          "deviceName": "CONTOSO-LT-315",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000197-0000-4000-8000-c0ffee000407",
+          "deviceName": "CONTOSO-LT-407",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000060-0000-4000-8000-c0ffee000096",
+          "deviceName": "CONTOSO-LT-096",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000031-0000-4000-8000-c0ffee000049",
+          "deviceName": "CONTOSO-LT-049",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000e5-0000-4000-8000-c0ffee000229",
+          "deviceName": "CONTOSO-LT-229",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000009c-0000-4000-8000-c0ffee000156",
+          "deviceName": "CONTOSO-LT-156",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000049-0000-4000-8000-c0ffee000073",
+          "deviceName": "CONTOSO-LT-073",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000002f-0000-4000-8000-c0ffee000047",
+          "deviceName": "CONTOSO-LT-047",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000114-0000-4000-8000-c0ffee000276",
+          "deviceName": "CONTOSO-LT-276",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000019f-0000-4000-8000-c0ffee000415",
+          "deviceName": "CONTOSO-LT-415",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001c8-0000-4000-8000-c0ffee000456",
+          "deviceName": "CONTOSO-LT-456",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000164-0000-4000-8000-c0ffee000356",
+          "deviceName": "CONTOSO-LT-356",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000145-0000-4000-8000-c0ffee000325",
+          "deviceName": "CONTOSO-LT-325",
+          "operatingSystem": "Windows"
+        }
+      ]
+    },
+    {
+      "id": "0014a3f1c2b7e9d00000000e0014",
+      "displayName": "Microsoft 365 Apps for enterprise - en-us",
+      "version": "16.0.20131.20140",
+      "publisher": "Microsoft Corporation",
+      "platform": "windows",
+      "sizeInByte": 27484332,
+      "deviceCount": 120,
+      "managedDevices": [
+        {
+          "id": "00000131-0000-4000-8000-c0ffee000305",
+          "deviceName": "CONTOSO-LT-305",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000cb-0000-4000-8000-c0ffee000203",
+          "deviceName": "CONTOSO-LT-203",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000e8-0000-4000-8000-c0ffee000232",
+          "deviceName": "CONTOSO-LT-232",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000014f-0000-4000-8000-c0ffee000335",
+          "deviceName": "CONTOSO-LT-335",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000017b-0000-4000-8000-c0ffee000379",
+          "deviceName": "CONTOSO-LT-379",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000013c-0000-4000-8000-c0ffee000316",
+          "deviceName": "CONTOSO-LT-316",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000014d-0000-4000-8000-c0ffee000333",
+          "deviceName": "CONTOSO-LT-333",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000051-0000-4000-8000-c0ffee000081",
+          "deviceName": "CONTOSO-LT-081",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000140-0000-4000-8000-c0ffee000320",
+          "deviceName": "CONTOSO-LT-320",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000008-0000-4000-8000-c0ffee000008",
+          "deviceName": "CONTOSO-LT-008",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001aa-0000-4000-8000-c0ffee000426",
+          "deviceName": "CONTOSO-LT-426",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000010f-0000-4000-8000-c0ffee000271",
+          "deviceName": "CONTOSO-LT-271",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000021-0000-4000-8000-c0ffee000033",
+          "deviceName": "CONTOSO-LT-033",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000001f-0000-4000-8000-c0ffee000031",
+          "deviceName": "CONTOSO-LT-031",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000013-0000-4000-8000-c0ffee000019",
+          "deviceName": "CONTOSO-LT-019",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000062-0000-4000-8000-c0ffee000098",
+          "deviceName": "CONTOSO-LT-098",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001c3-0000-4000-8000-c0ffee000451",
+          "deviceName": "CONTOSO-LT-451",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000007c-0000-4000-8000-c0ffee000124",
+          "deviceName": "CONTOSO-LT-124",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000134-0000-4000-8000-c0ffee000308",
+          "deviceName": "CONTOSO-LT-308",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000010-0000-4000-8000-c0ffee000016",
+          "deviceName": "CONTOSO-LT-016",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000018f-0000-4000-8000-c0ffee000399",
+          "deviceName": "CONTOSO-LT-399",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ee-0000-4000-8000-c0ffee000238",
+          "deviceName": "CONTOSO-LT-238",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000a8-0000-4000-8000-c0ffee000168",
+          "deviceName": "CONTOSO-LT-168",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000e2-0000-4000-8000-c0ffee000226",
+          "deviceName": "CONTOSO-LT-226",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000012f-0000-4000-8000-c0ffee000303",
+          "deviceName": "CONTOSO-LT-303",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001b0-0000-4000-8000-c0ffee000432",
+          "deviceName": "CONTOSO-LT-432",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000065-0000-4000-8000-c0ffee000101",
+          "deviceName": "CONTOSO-LT-101",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000010a-0000-4000-8000-c0ffee000266",
+          "deviceName": "CONTOSO-LT-266",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000078-0000-4000-8000-c0ffee000120",
+          "deviceName": "CONTOSO-LT-120",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000148-0000-4000-8000-c0ffee000328",
+          "deviceName": "CONTOSO-LT-328",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000097-0000-4000-8000-c0ffee000151",
+          "deviceName": "CONTOSO-LT-151",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000100-0000-4000-8000-c0ffee000256",
+          "deviceName": "CONTOSO-LT-256",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000003-0000-4000-8000-c0ffee000003",
+          "deviceName": "CONTOSO-LT-003",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000154-0000-4000-8000-c0ffee000340",
+          "deviceName": "CONTOSO-LT-340",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000002c-0000-4000-8000-c0ffee000044",
+          "deviceName": "CONTOSO-LT-044",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000eb-0000-4000-8000-c0ffee000235",
+          "deviceName": "CONTOSO-LT-235",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000150-0000-4000-8000-c0ffee000336",
+          "deviceName": "CONTOSO-LT-336",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000008f-0000-4000-8000-c0ffee000143",
+          "deviceName": "CONTOSO-LT-143",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000d1-0000-4000-8000-c0ffee000209",
+          "deviceName": "CONTOSO-LT-209",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000011b-0000-4000-8000-c0ffee000283",
+          "deviceName": "CONTOSO-LT-283",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000002b-0000-4000-8000-c0ffee000043",
+          "deviceName": "CONTOSO-LT-043",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000016b-0000-4000-8000-c0ffee000363",
+          "deviceName": "CONTOSO-LT-363",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000083-0000-4000-8000-c0ffee000131",
+          "deviceName": "CONTOSO-LT-131",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000a2-0000-4000-8000-c0ffee000162",
+          "deviceName": "CONTOSO-LT-162",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000185-0000-4000-8000-c0ffee000389",
+          "deviceName": "CONTOSO-LT-389",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000076-0000-4000-8000-c0ffee000118",
+          "deviceName": "CONTOSO-LT-118",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000107-0000-4000-8000-c0ffee000263",
+          "deviceName": "CONTOSO-LT-263",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000094-0000-4000-8000-c0ffee000148",
+          "deviceName": "CONTOSO-LT-148",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001c6-0000-4000-8000-c0ffee000454",
+          "deviceName": "CONTOSO-LT-454",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000024-0000-4000-8000-c0ffee000036",
+          "deviceName": "CONTOSO-LT-036",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000121-0000-4000-8000-c0ffee000289",
+          "deviceName": "CONTOSO-LT-289",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000189-0000-4000-8000-c0ffee000393",
+          "deviceName": "CONTOSO-LT-393",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000038-0000-4000-8000-c0ffee000056",
+          "deviceName": "CONTOSO-LT-056",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ce-0000-4000-8000-c0ffee000206",
+          "deviceName": "CONTOSO-LT-206",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001a2-0000-4000-8000-c0ffee000418",
+          "deviceName": "CONTOSO-LT-418",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000095-0000-4000-8000-c0ffee000149",
+          "deviceName": "CONTOSO-LT-149",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000c6-0000-4000-8000-c0ffee000198",
+          "deviceName": "CONTOSO-LT-198",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000023-0000-4000-8000-c0ffee000035",
+          "deviceName": "CONTOSO-LT-035",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000009-0000-4000-8000-c0ffee000009",
+          "deviceName": "CONTOSO-LT-009",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000015f-0000-4000-8000-c0ffee000351",
+          "deviceName": "CONTOSO-LT-351",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000001-0000-4000-8000-c0ffee000001",
+          "deviceName": "CONTOSO-LT-001",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000006e-0000-4000-8000-c0ffee000110",
+          "deviceName": "CONTOSO-LT-110",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000006c-0000-4000-8000-c0ffee000108",
+          "deviceName": "CONTOSO-LT-108",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000001b-0000-4000-8000-c0ffee000027",
+          "deviceName": "CONTOSO-LT-027",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000f1-0000-4000-8000-c0ffee000241",
+          "deviceName": "CONTOSO-LT-241",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000c1-0000-4000-8000-c0ffee000193",
+          "deviceName": "CONTOSO-LT-193",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001ad-0000-4000-8000-c0ffee000429",
+          "deviceName": "CONTOSO-LT-429",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000cc-0000-4000-8000-c0ffee000204",
+          "deviceName": "CONTOSO-LT-204",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000d7-0000-4000-8000-c0ffee000215",
+          "deviceName": "CONTOSO-LT-215",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000026-0000-4000-8000-c0ffee000038",
+          "deviceName": "CONTOSO-LT-038",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000122-0000-4000-8000-c0ffee000290",
+          "deviceName": "CONTOSO-LT-290",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000143-0000-4000-8000-c0ffee000323",
+          "deviceName": "CONTOSO-LT-323",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000066-0000-4000-8000-c0ffee000102",
+          "deviceName": "CONTOSO-LT-102",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000015a-0000-4000-8000-c0ffee000346",
+          "deviceName": "CONTOSO-LT-346",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000008b-0000-4000-8000-c0ffee000139",
+          "deviceName": "CONTOSO-LT-139",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ad-0000-4000-8000-c0ffee000173",
+          "deviceName": "CONTOSO-LT-173",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000002d-0000-4000-8000-c0ffee000045",
+          "deviceName": "CONTOSO-LT-045",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000a0-0000-4000-8000-c0ffee000160",
+          "deviceName": "CONTOSO-LT-160",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ab-0000-4000-8000-c0ffee000171",
+          "deviceName": "CONTOSO-LT-171",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001cd-0000-4000-8000-c0ffee000461",
+          "deviceName": "CONTOSO-LT-461",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000d2-0000-4000-8000-c0ffee000210",
+          "deviceName": "CONTOSO-LT-210",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001cc-0000-4000-8000-c0ffee000460",
+          "deviceName": "CONTOSO-LT-460",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000003d-0000-4000-8000-c0ffee000061",
+          "deviceName": "CONTOSO-LT-061",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000045-0000-4000-8000-c0ffee000069",
+          "deviceName": "CONTOSO-LT-069",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000007f-0000-4000-8000-c0ffee000127",
+          "deviceName": "CONTOSO-LT-127",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000016a-0000-4000-8000-c0ffee000362",
+          "deviceName": "CONTOSO-LT-362",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000034-0000-4000-8000-c0ffee000052",
+          "deviceName": "CONTOSO-LT-052",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000006-0000-4000-8000-c0ffee000006",
+          "deviceName": "CONTOSO-LT-006",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001c9-0000-4000-8000-c0ffee000457",
+          "deviceName": "CONTOSO-LT-457",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ef-0000-4000-8000-c0ffee000239",
+          "deviceName": "CONTOSO-LT-239",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000fa-0000-4000-8000-c0ffee000250",
+          "deviceName": "CONTOSO-LT-250",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000005b-0000-4000-8000-c0ffee000091",
+          "deviceName": "CONTOSO-LT-091",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000015e-0000-4000-8000-c0ffee000350",
+          "deviceName": "CONTOSO-LT-350",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000011f-0000-4000-8000-c0ffee000287",
+          "deviceName": "CONTOSO-LT-287",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000061-0000-4000-8000-c0ffee000097",
+          "deviceName": "CONTOSO-LT-097",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000e6-0000-4000-8000-c0ffee000230",
+          "deviceName": "CONTOSO-LT-230",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000105-0000-4000-8000-c0ffee000261",
+          "deviceName": "CONTOSO-LT-261",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001c7-0000-4000-8000-c0ffee000455",
+          "deviceName": "CONTOSO-LT-455",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000044-0000-4000-8000-c0ffee000068",
+          "deviceName": "CONTOSO-LT-068",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000192-0000-4000-8000-c0ffee000402",
+          "deviceName": "CONTOSO-LT-402",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000014a-0000-4000-8000-c0ffee000330",
+          "deviceName": "CONTOSO-LT-330",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000c5-0000-4000-8000-c0ffee000197",
+          "deviceName": "CONTOSO-LT-197",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000003c-0000-4000-8000-c0ffee000060",
+          "deviceName": "CONTOSO-LT-060",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000001d5-0000-4000-8000-c0ffee000469",
+          "deviceName": "CONTOSO-LT-469",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000d8-0000-4000-8000-c0ffee000216",
+          "deviceName": "CONTOSO-LT-216",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000006d-0000-4000-8000-c0ffee000109",
+          "deviceName": "CONTOSO-LT-109",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000019a-0000-4000-8000-c0ffee000410",
+          "deviceName": "CONTOSO-LT-410",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000018c-0000-4000-8000-c0ffee000396",
+          "deviceName": "CONTOSO-LT-396",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000130-0000-4000-8000-c0ffee000304",
+          "deviceName": "CONTOSO-LT-304",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000009c-0000-4000-8000-c0ffee000156",
+          "deviceName": "CONTOSO-LT-156",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000000b-0000-4000-8000-c0ffee000011",
+          "deviceName": "CONTOSO-LT-011",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000198-0000-4000-8000-c0ffee000408",
+          "deviceName": "CONTOSO-LT-408",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000060-0000-4000-8000-c0ffee000096",
+          "deviceName": "CONTOSO-LT-096",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "000000ca-0000-4000-8000-c0ffee000202",
+          "deviceName": "CONTOSO-LT-202",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000135-0000-4000-8000-c0ffee000309",
+          "deviceName": "CONTOSO-LT-309",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000149-0000-4000-8000-c0ffee000329",
+          "deviceName": "CONTOSO-LT-329",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000128-0000-4000-8000-c0ffee000296",
+          "deviceName": "CONTOSO-LT-296",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000180-0000-4000-8000-c0ffee000384",
+          "deviceName": "CONTOSO-LT-384",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "00000016-0000-4000-8000-c0ffee000022",
+          "deviceName": "CONTOSO-LT-022",
+          "operatingSystem": "Windows"
+        },
+        {
+          "id": "0000004b-0000-4000-8000-c0ffee000075",
+          "deviceName": "CONTOSO-LT-075",
+          "operatingSystem": "Windows"
+        }
+      ]
     }
   ]
 }

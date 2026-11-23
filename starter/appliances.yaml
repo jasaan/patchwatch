@@ -1,0 +1,11 @@
+# One entry per appliance. `product` must match a rule in mappings.yaml.
+# Delete the examples and list your own (or export them from your CMDB in this shape).
+- host: fw-edge-01
+  product: Cisco Secure Firewall ASA
+  version: 9.20.4.10
+  internet_facing: true
+  exposure: Remote access VPN on the outside interface
+# - host: fw-branch-01
+#   product: FortiGate FortiOS
+#   version: 7.4.5
+#   internet_facing: true

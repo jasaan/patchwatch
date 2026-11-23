@@ -4,11 +4,14 @@
 inventory:
   intune:
     file: inventory/intune/detectedApps.json   # Graph /deviceManagement/detectedApps response
+    devices_file: inventory/intune/managedDevices.json  # Graph /deviceManagement/managedDevices (OS builds)
   server_sboms:
     - inventory/servers                        # CycloneDX JSON, one file per host (syft output)
   kubernetes:
     file: inventory/k8s/cluster.json           # kubectl get pods,services,ingresses -A -o json (+ version)
     sbom_dir: inventory/k8s/sboms              # one CycloneDX SBOM per image
+  appliances:
+    file: inventory/appliances.yaml            # firewalls, VPN gateways: host, product, version
 
 mappings: mappings.yaml
 feeds_dir: feeds                               # recorded feed responses used in replay mode
@@ -17,6 +20,11 @@ exposure:
   internet_facing: [web-01]                    # servers; Kubernetes exposure is read from Services and Ingresses
 
 nvd_lookback_days: 120
+
+advisories:                                    # vendor advisories (CSAF)
+  providers: [microsoft, cisco]                # also: redhat, suse, siemens, cisa-ics, or a provider-metadata URL
+  lookback_days: 30                            # advisories changed in this window are read
+  cache_dir: ~/.cache/exploitwatch             # downloaded advisories, so later runs only fetch changes
 
 triage:
   zero_day_days: 14

@@ -1,14 +1,42 @@
 # ExploitWatch report: 2026-11-21
 
-29 products checked. **7 urgent**, 7 for the daily digest, 5 for weekly planning, and 863 lower-risk findings logged without a notification.
+36 products checked. **11 urgent**, 7 for the daily digest, 5 for weekly planning, and 2333 lower-risk findings logged without a notification.
 
 ## 🔴 Urgent
+
+### Windows 11 24H2 10.0.26100.9580
+*45 endpoints*
+
+- On CISA KEV: CVE-2026-96951 (added 2026-10-13)
+- Vendor says it is exploited: CVE-2026-96951 (Microsoft)
+- Critical RCE in the endpoint operating system: CVE-2026-112967 (CVSS 9.8), CVE-2026-116928 (CVSS 9.8), CVE-2026-119958 (CVSS 9.8), CVE-2026-69886 (CVSS 9.8) and 12 more
+- Critical auth bypass in the endpoint operating system: CVE-2026-85844 (CVSS 9.8)
+- 18 vulnerabilities · fix: upgrade to 10.0.26100.9974 or later
+- Vendor: [Microsoft CVE-2026-96951](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951) · [Microsoft CVE-2026-112967](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112967) · [Update](https://support.microsoft.com/help/5127648)
 
 ### Notepad++ 8.8.1
 *37 endpoints*
 
 - On CISA KEV: CVE-2025-15556 (added 2026-02-12)
 - 1 vulnerability · fix: upgrade to 8.8.9 or later
+
+### Microsoft Edge 154.0.4258.37
+*28 endpoints*
+
+- On CISA KEV: CVE-2026-96951 (added 2026-10-13)
+- Vendor says it is exploited: CVE-2026-96951 (Microsoft)
+- 1 vulnerability · fix: upgrade to 154.0.4258.62 or later
+- Vendor: [Microsoft CVE-2026-96951](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951) · [Update](https://learn.microsoft.com/en-us/DeployEdge/microsoft-edge-relnotes-security)
+
+### Windows 10 22H2 10.0.19045.7725
+*15 endpoints*
+
+- On CISA KEV: CVE-2026-96951 (added 2026-10-13)
+- Vendor says it is exploited: CVE-2026-96951 (Microsoft)
+- Critical RCE in the endpoint operating system: CVE-2026-112967 (CVSS 9.8), CVE-2026-116928 (CVSS 9.8), CVE-2026-119958 (CVSS 9.8), CVE-2026-69886 (CVSS 9.8) and 12 more
+- Critical auth bypass in the endpoint operating system: CVE-2026-85844 (CVSS 9.8)
+- 18 vulnerabilities · fix: upgrade to 10.0.19045.7846 or later
+- Vendor: [Microsoft CVE-2026-96951](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96951) · [Microsoft CVE-2026-112967](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112967) · [Update](https://support.microsoft.com/help/5126657)
 
 ### WinRAR 7.01.0
 *12 endpoints*
@@ -17,6 +45,15 @@
 - Used in ransomware campaigns: CVE-2025-8088
 - Advisory says it is exploited in the wild: CVE-2025-8088
 - 2 vulnerabilities · fix: upgrade to 7.13 or later
+
+### Cisco Secure Firewall ASA 9.20.4.10
+*1 appliance · internet-facing: fw-edge-01 (AnyConnect VPN on the outside interface)*
+
+- On CISA KEV: CVE-2026-20349 (added 2026-08-11), CVE-2026-76418 (added 2026-10-29)
+- Vendor says it is exploited: CVE-2026-20349 (Cisco), CVE-2026-76418 (Cisco)
+- Critical and internet-facing: CVE-2026-20329 (CVSS 9.9), CVE-2026-20330 (CVSS 9.9), CVE-2026-20332 (CVSS 9.9), CVE-2026-20331 (CVSS 9.6)
+- 6 vulnerabilities
+- Vendor: [Cisco CVE-2026-20349](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-vpn-dos-dzv4mQFF) · [Cisco CVE-2026-76418](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-tunnel-dos-s6mgkb75) · [Update](https://software.cisco.com)
 
 ### ingress-nginx 1.11.3
 *1 workload · internet-facing: prod-aks/ingress-nginx/ingress-nginx-controller (Service type LoadBalancer)*
@@ -95,6 +132,7 @@
 
 - Likely to be exploited soon (EPSS >= 10%): CVE-2026-42945 (EPSS 69%), CVE-2026-49975 (EPSS 32%), CVE-2026-123007 (EPSS 30%), CVE-2026-27654 (EPSS 28%) and 3 more
 - 7 vulnerabilities · fix: upgrade to 1.24.0-2ubuntu7.20 or later
+- Vendor: [Cisco CVE-2026-113425](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-nginx-nov-2026-e8jska2s)
 
 ### openssh-server 1:9.6p1-3ubuntu13.5
 *1 server · internet-facing: web-01 (listed as internet-facing in config)*
@@ -136,10 +174,15 @@
 | Product | Findings |
 |---|---|
 | Google Chrome 157.0.8103.50 | 271 |
+| Microsoft 365 Apps 16.0.20131.20140 | 12 |
 | 7-Zip 25.01 | 1 |
+| Windows 11 24H2 10.0.26100.9580 | 746 |
+| Microsoft Edge 154.0.4258.37 | 14 |
 | Mozilla Firefox 156.0 | 148 |
+| Windows 10 22H2 10.0.19045.7725 | 684 |
 | axios 1.7.9 | 33 |
 | busybox 1.37.0-r18 | 2 |
+| Cisco Secure Firewall ASA 9.20.4.10 | 14 |
 | django 5.1.4 | 17 |
 | ingress-nginx 1.11.3 | 5 |
 | libssl3 3.0.15-1~deb12u1 | 44 |
@@ -161,3 +204,5 @@
 
 - Intune app not mapped to a product: Contoso Expense Helper 2.3.1 (140 devices). Add a rule to mappings.yaml.
 - No SBOM for image registry.k8s.io/coredns/coredns:v1.12.1. Generate one with: syft registry.k8s.io/coredns/coredns:v1.12.1 -o cyclonedx-json
+- Microsoft says CVE-2026-124194 is exploited in Microsoft 365 Apps for Enterprise for 64-bit Systems, but the advisory doesn't give versions. Check Microsoft 365 Apps 16.0.20131.20140 by hand: https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-124194
+- Cisco advisory cisco-sa-hardening-asaftdfmc-uvpPROhN affects Cisco Secure Firewall ASA 9.20.4.10 and says "Two vulnerabilities that belong to this vulnerability class are known to be actively exploited." without naming which CVEs. Check: https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-hardening-asaftdfmc-uvpPROhN

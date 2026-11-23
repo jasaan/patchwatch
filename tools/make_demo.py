@@ -1,6 +1,7 @@
 """Write the fictional demo inventory under demo/inventory/.
 
-Contoso has ~470 Intune-managed laptops, two Ubuntu servers and one AKS cluster. The
+Contoso has ~470 Intune-managed laptops, two Ubuntu servers, one AKS cluster and an edge
+firewall (demo/inventory/appliances.yaml, kept by hand). The
 versions are chosen to be realistic for late 2026: mostly current, with a few apps and
 images that fell behind. Re-run after editing; the output is committed.
 """
@@ -23,6 +24,26 @@ devices = [
     {"id": f"{i:08x}-0000-4000-8000-c0ffee{i:06d}", "deviceName": f"CONTOSO-LT-{i:03d}", "operatingSystem": "Windows"}
     for i in range(1, 471)
 ]
+
+
+def os_build(i: int) -> str:
+    """Most laptops took November's update; 45 are stuck before October's, 15 still run Windows 10."""
+    if i <= 300:
+        return "10.0.26100.9974"  # Windows 11 24H2, November 2026
+    if i <= 410:
+        return "10.0.26200.9974"  # Windows 11 25H2, November 2026
+    if i <= 455:
+        return "10.0.26100.9580"  # Windows 11 24H2, missed October's update
+    return "10.0.19045.7725"  # Windows 10 22H2, missed October's update
+
+
+write(
+    OUT / "intune" / "managedDevices.json",
+    {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#deviceManagement/managedDevices",
+        "value": [{**d, "osVersion": os_build(i)} for i, d in enumerate(devices, 1)],
+    },
+)
 apps = [  # displayName, version, publisher, how many devices
     ("Google Chrome", "157.0.8103.50", "Google LLC", 150),
     ("Google Chrome (x64)", "157.0.8103.50", "Google LLC", 12),
@@ -36,9 +57,13 @@ apps = [  # displayName, version, publisher, how many devices
     ("Python 3.9.13 (64-bit)", "3.9.13", "Python Software Foundation", 6),
     ("Microsoft Teams", "26290.1202.4015.2236", "Microsoft Corporation", 465),
     ("Contoso Expense Helper", "2.3.1", "Contoso Ltd", 140),
+    ("Microsoft Edge", "154.0.4258.37", "Microsoft Corporation", 28),
+    ("Microsoft 365 Apps for enterprise - en-us", "16.0.20131.20140", "Microsoft Corporation", 120),
 ]
 value = []
+later = random.Random(11)  # apps added later draw from their own generator, so older demo files don't change
 for n, (name, version, publisher, count) in enumerate(apps, 1):
+    rng = random if n <= 12 else later
     value.append(
         {
             "id": f"{n:04d}a3f1c2b7e9d0{n:08x}{n:04d}"[:44],
@@ -46,9 +71,9 @@ for n, (name, version, publisher, count) in enumerate(apps, 1):
             "version": version,
             "publisher": publisher,
             "platform": "windows",
-            "sizeInByte": random.randint(5_000_000, 400_000_000),
+            "sizeInByte": rng.randint(5_000_000, 400_000_000),
             "deviceCount": count,
-            "managedDevices": random.sample(devices, count),
+            "managedDevices": rng.sample(devices, count),
         }
     )
 write(

@@ -1,6 +1,9 @@
 # Maps inventory names to the product names the feeds use. First matching rule wins.
 #   match           regex on the Intune display name, or on a package URL without the version
 #   cpe             NVD vendor:product, for desktop apps (see `exploitwatch suggest`)
+#   advisories      a vendor that publishes CSAF advisories (microsoft, cisco, redhat, suse, ...)
+#   advisory_product  regex on that vendor's product names (see `exploitwatch products <vendor>`)
+#   same_line       leading version parts that must match the advisory's (3 for Windows builds)
 #   kev             regex on "vendor|product" as written in the CISA KEV catalog
 #   eol             endoflife.date product, for end-of-support and release checks
 #   watch_releases  also notify (weekly) when a newer release is out, even without a CVE
@@ -38,8 +41,29 @@
   name: Python
   cpe: python:python
   eol: python
+- match: '^Microsoft Edge$'
+  name: Microsoft Edge
+  advisories: microsoft
+  advisory_product: '^Microsoft Edge \(Chromium-based\)$'
+- match: '^Microsoft 365 Apps for (enterprise|business)'
+  name: Microsoft 365 Apps
+  advisories: microsoft
+  advisory_product: '^Microsoft 365 Apps for Enterprise for 64-bit Systems$'
 - match: '^Microsoft Teams'
   ignore: true          # updated by Microsoft; covered by Microsoft 365 service health
+
+# Operating systems of Intune devices, matched on "<operatingSystem> <osVersion>"
+- match: '^Windows 10\.0\.'
+  name: Windows
+  advisories: microsoft
+  advisory_product: '^Windows 1[01] Version .* for x64-based Systems$'
+  same_line: 3          # 10.0.26100.x is only compared with 24H2's fixes, not 25H2's
+
+# Appliances (inventory/appliances.yaml)
+- match: '^Cisco (Secure Firewall )?ASA|Adaptive Security Appliance'
+  name: Cisco Secure Firewall ASA
+  advisories: cisco
+  advisory_product: 'Adaptive Security Appliance \(ASA\) Software'
 
 # Packages from SBOMs and container images (matched through OSV automatically)
 - match: '^pkg:pypi/django$'

@@ -1,0 +1,7 @@
+# Firewalls, VPN gateways and other appliances, kept by hand (or exported from your CMDB).
+# `product` is matched against mappings.yaml; `internet_facing` raises the stakes in triage.
+- host: fw-edge-01
+  product: Cisco Secure Firewall ASA
+  version: 9.20.4.10
+  internet_facing: true
+  exposure: AnyConnect VPN on the outside interface
